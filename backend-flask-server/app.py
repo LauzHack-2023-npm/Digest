@@ -13,10 +13,10 @@ def post_digest():
 
     # get source name
     source_name = getSourceName(digestName, digestDescription)
-    
+
     keyword = generateKeyword(digestName, digestDescription)
     print("keyword: ", keyword)
-    
+
     if source_name == "wikipedia":
         # get wikipedia articles
         retriever = WikiRetriever()
@@ -37,7 +37,7 @@ def post_digest():
             return jsonify({"error": result['error']})
     else:
         return jsonify({"error": "wrong source name"})
-    
+
 
 ### DATA ROUTES ###
 @app.route('/api/data/wiki')
@@ -51,8 +51,8 @@ def get_wiki_content():
         return jsonify(data)
     else:
         return jsonify({"error": result['error']})
-    
-    
+
+
 @app.route('/api/get-dummy-digest-sequences')
 def get_dummy_digest_sequences():
     digest_sequences = [
@@ -77,7 +77,7 @@ def get_arxiv_articles():
         return jsonify(data)
     else:
         return jsonify({"error": result['error']})
-    
+
 @app.route('/api/digest-sequence', methods = ['POST'])
 def post_digest_sequence():
     digestName = request.args.get("digestName")
@@ -86,14 +86,35 @@ def post_digest_sequence():
     narrationStyle = request.args.get("customNarrationStyle") if request.args.get("customNarrationStyle") is not None and request.args.get("customNarrationStyle") != "" else request.args.get("narrationStyle")
 
     return {
-        'name': digestName,
-        'description': digestDescription,
-        'frequency': contentFrequency,
-        'narrationStyle': narrationStyle,
-        'sources': [
-            {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
-            {'name': 'arxive', 'url': 'https://arxiv.org/'}
-        ]
+    'digestName': digestName,
+    'digestDescription': digestDescription,
+    'contentFrequency': contentFrequency,
+    'narrationStyle': narrationStyle,
+    'sources': [
+        {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
+        {'name': 'arxive', 'url': 'https://arxiv.org/'}
+    ]
+    }
+
+@app.route('/api/sources', methods = ['POST'])
+def post_sources():
+    data = request.get_json()
+    digestName = data.get("digestName")
+    digestDescription = data.get("digestDescription")
+    contentFrequency = data.get("customFrequency") if data.get("customFrequency") is not None and data.get("customFrequency") != "" else data.get("contentFrequency")
+    narrationStyle = data.get("customNarrationStyle") if data.get("customNarrationStyle") is not None and data.get("customNarrationStyle") != "" else data.get("narrationStyle")
+    sources = data.get("sources")
+    customSources = data.get("customSources")
+
+    # TODO: create real sources recommendations
+
+    return {
+    'digestName': digestName,
+    'digestDescription': digestDescription,
+    'contentFrequency': contentFrequency,
+    'narrationStyle': narrationStyle,
+    'sources': sources,
+    'customSources': customSources
     }
 
 if __name__ == '__main__':
