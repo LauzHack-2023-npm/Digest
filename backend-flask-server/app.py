@@ -51,6 +51,18 @@ def get_wiki_content():
         return jsonify(data)
     else:
         return jsonify({"error": result['error']})
+    
+    
+@app.route('/api/get-dummy-digest-sequences')
+def get_dummy_digest_sequences():
+    digest_sequences = [
+        {"hello": "world1"},
+        {"hello": "world2"},
+        {"hello": "world3"},
+        {"hello": "world4"},
+        {"hello": "world5"},
+    ]
+    return jsonify(digest_sequences)
 
 @app.route("/api/data/arxiv")
 def get_arxiv_articles():
