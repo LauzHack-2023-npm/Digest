@@ -8,6 +8,7 @@ import AddDigestPage from "./pages/add-digest";
 import Footer from './components/Footer';
 import ResponsiveAppBar from './components/ResponsiveNavbar';
 import ResourcesForm from "./components/resourcesForm";
+import DigestPage from "./pages/digest";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               <Route path="/page2" Component={Page2}/>
               <Route path="/add-digest" Component={AddDigestPage}/>
               <Route path="/set-resources" Component={ResourcesForm}/>
+              <Route exact path="/digest/:id" Component={DigestPage}/>
             </Routes>
           </div>
           <Footer/>
