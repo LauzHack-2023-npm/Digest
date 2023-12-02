@@ -4,10 +4,6 @@ from flask import jsonify
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Hello, Flask!'
-
 @app.route('/api/data/wiki')
 def get_wiki_content():
     

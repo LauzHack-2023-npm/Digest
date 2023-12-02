@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import logo from '../logo.svg';
+import { DigestContext } from '../components/ContextProvider';
 
 const HomePage = () => {
 
@@ -8,6 +9,7 @@ const HomePage = () => {
   // Using a setter function is necessary because by invoking the setter React is 
   // able to trigger updates in the parts of the application that depend on this state. 
   const [currentTime, setCurrentTime] = useState(0);
+  const { digestSequences, setDigestSequences } = useContext(DigestContext);
 
   // Issue a request from the frontend to the backend upon rendering the component.
   useEffect(
