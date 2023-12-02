@@ -16,25 +16,23 @@ import AddIcon from '@mui/icons-material/Add';
 const DigestSequenceForm = () => {
     const [formData, setFormData] = useState({
         digestName: '',
-        digestDescription: '',
-        contentFrequency: 'weekly',
+        interestDescription: '',
+        contentFrequency: 'Weekly',
         customFrequency: '',
         narrationStyle: 'scientific',
         customNarrationStyle: '',
-        // selectedSources: {
-        //     wikipedia: false,
-        //     news: false,
-        //     archive: false,
-        // },
-        // customSources: ['', '', ''],
+        selectedSources: {
+            wikipedia: false,
+            news: false,
+            archive: false,
+        },
+        customSources: ['', '', ''],
     });
 
     const [showCustomSources, setShowCustomSources] = useState(0);
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-        console.log(name)
-        console.log(value)
         setFormData({
             ...formData,
             [name]: value,
@@ -57,65 +55,11 @@ const DigestSequenceForm = () => {
         }
     };
 
-    const postDigestSequence = async () => {
-        console.log('sending this:')
-        console.log(formData)
-        try {
-            const response = await fetch('/api/digest-sequence', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            // Optionally, you can handle the response here if needed
-            const responseData = await response.json();
-            console.log(responseData);
-
-            // // You can reset the form data or perform other actions after a successful request
-            // setFormData({
-            //     digestName: '',
-            //     interestDescription: '',
-            //     contentFrequency: 'Weekly',
-            //     customFrequency: '',
-            //     narrationStyle: 'scientific',
-            //     customNarrationStyle: '',
-            //     selectedSources: {
-            //         wikipedia: false,
-            //         news: false,
-            //         archive: false,
-            //     },
-            //     customSources: ['', '', ''],
-            // });
-
-            // Optionally, you can navigate to another page or perform other actions
-            // after a successful request
-        } catch (error) {
-            console.error('Error sending data:', error);
-            // Optionally, you can handle errors and display a message to the user
-        }
-    };
-
-
-    return (<>
+    return (
         <form>
             <FormControl fullWidth margin="normal">
-                {/*<InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>*/}
-                {/*<Input*/}
-                {/*    id="digestName"*/}
-                {/*    name="digestName"*/}
-                {/*    value={formData.digestName}*/}
-                {/*    onChange={handleInputChange}*/}
-                {/*/>*/}
-                <InputLabel htmlFor="digestName"></InputLabel>
-                <TextField
-                    label="Name of Your Digest"
-                    // placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
+                <InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>
+                <Input
                     id="digestName"
                     name="digestName"
                     value={formData.digestName}
@@ -124,15 +68,15 @@ const DigestSequenceForm = () => {
             </FormControl>
 
             <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="digestDescription"></InputLabel>
+                <InputLabel htmlFor="interestDescription"></InputLabel>
                 <TextField
-                    id="digestDescription"
-                    name="digestDescription"
+                    id="interestDescription"
+                    name="interestDescription"
                     label="Describe your interest"
                     placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
                     multiline
                     rows={4}
-                    value={formData.digestDescription}
+                    value={formData.interestDescription}
                     onChange={handleInputChange}
                 />
             </FormControl>
@@ -153,7 +97,7 @@ const DigestSequenceForm = () => {
                     <MenuItem value="other">Other</MenuItem>
                 </Select>
                 {formData.contentFrequency === 'other' && (
-                    <TextField sx={{marginY: 1}}
+                    <TextField
                         id="customFrequency"
                         name="customFrequency"
                         placeholder="Specify frequency"
@@ -180,7 +124,7 @@ const DigestSequenceForm = () => {
 
                 </Select>
                 {(formData.narrationStyle === 'other') && (
-                    <TextField sx={{marginY: 1}}
+                    <TextField
                         id="customNarrationStyle"
                         name="customNarrationStyle"
                         placeholder="Specify narration style"
@@ -252,11 +196,6 @@ const DigestSequenceForm = () => {
             {/*    </MenuItem> : null}*/}
             {/*</FormControl>*/}
         </form>
-            <Box sx={{display: 'flex', justifyContent: 'center', marginY: 4}}>
-                <Button onClick={postDigestSequence} variant="outlined">Next</Button>
-            </Box>
-
-        </>
     );
 };
 

@@ -7,6 +7,7 @@ import Navbar from './components/navbar';
 import { ContextProvider } from './components/ContextProvider';
 import AddDigestPage from "./pages/add-digest";
 import Footer from './components/Footer';
+import Navbar from "./components/navbar";
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
 
   return (
     <div className="bg-background min-h-screen">
-      <BrowserRouter className="flex h-full w-full"> 
+      <BrowserRouter className="flex h-full w-full">
         <ContextProvider>
           <Navbar height={navbarHeight}/>
           <div className="m-auto max-w-2xl">
