@@ -3,6 +3,9 @@ import Button from '@mui/material/Button';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 const Banner = () => {
+
+
+
   return (
     <div className="relative w-screen text-center h-96">
       {/* Video or Image Background */}
@@ -15,8 +18,8 @@ const Banner = () => {
 
       {/* Centered Text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <p className="text-4xl w-full pb-10 text-white font-bold">Digest is here</p>
-        <p className="text-2xl w-full text-white font-bold">Discover ...</p>
+        <p className="text-4xl w-full pb-10 text-white font-bold">Digest: Where Ideas Speak to You.</p>
+        <p className="text-2xl w-full text-white font-semibold">Digest crafts personalized podcasts from arXiv and beyond, delivering curated insights to your ears.</p>
         {/* Call to Action Button */}
         <div className="pt-10">
           <Button variant="contained" color="primary">

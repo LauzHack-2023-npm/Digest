@@ -11,23 +11,20 @@ import ResponsiveAppBar from './components/ResponsiveNavbar';
 
 function App() {
 
-  const navbarHeight = "52px";
-  const footerHeight = "48px";
-
   return (
     <div className="bg-background min-h-screen">
       <BrowserRouter className="flex h-full w-full">
         <ContextProvider>
           {/* <Navbar height={navbarHeight}/> */}
           <ResponsiveAppBar/>
-          <div className="m-auto max-w-2xl">
+          <div className="m-auto max-w-2xl min-h-screen">
             <Routes>
-              <Route path="/" element={<HomePage navbarHeight={navbarHeight} footerHeight={footerHeight}/>}/>
+              <Route path="/" Component={HomePage}/>
               <Route path="/page2" Component={Page2}/>
               <Route path="/add-digest" Component={AddDigestPage}/>
             </Routes>
           </div>
-          <Footer height={footerHeight}/>
+          <Footer/>
         </ContextProvider>
       </BrowserRouter>
     </div>
