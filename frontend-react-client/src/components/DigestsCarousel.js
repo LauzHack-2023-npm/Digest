@@ -22,7 +22,7 @@ const DigestsCarousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
   const sliderButtonClassName = 'absolute top-1/2 -translate-y-4 rounded-full text-dark dark:text-light bg-light-accent2 dark:bg-dark text-4xl p-1 z-20 opacity-50 hover:opacity-70';
 
   return (
-    <div className="relative w-full h-full pt-3 md:pt-0 md:w-3/5 max-h-80 md:h-auto" >
+    <div className="relative w-full h-full max-h-80 md:h-auto" >
       {items.length > 1 ?
         <ArrowBackIosIcon onClick={() => slider.current.slickPrev()} className={`${sliderButtonClassName} left-0`} />
         : null
@@ -32,7 +32,7 @@ const DigestsCarousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
           items.map((item, idx) => {
             return (
               //<div key={idx} className='flex items-center justify-center h-full'>
-              <DigestCard key={idx} className='' alt={`Image ${idx + 1}`} />
+              <DigestCard key={idx} className='' item={item} />
               //</div>
             );
           })

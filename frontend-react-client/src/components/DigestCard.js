@@ -1,7 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 
-const DigestCard = ({ title="NaN", description="NaN", imageUrl="NaN", createdAt="NaN", className }) => {
+const DigestCard = ({ item, className }) => {
+
+  // Destructure the item object
+  const { title, description, imageUrl, createdAt } = item;
 
   // Function to calculate how many days ago the episode was created
   const calculateDaysAgo = (createdDate) => {

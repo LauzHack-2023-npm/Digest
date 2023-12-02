@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import logo from '../logo.svg';
 import { DigestContext } from '../components/ContextProvider';
-import DigestCard from '../components/DigestCard';
 import DigestsCarousel from '../components/DigestsCarousel';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const HomePage = () => {
+
+const HomePage = ({ navbarHeight, footerHeight }) => {
 
   // Add state to the application to hold data.
   // The function returns two values, a getter and a setter for the new state.
@@ -27,21 +28,12 @@ const HomePage = () => {
   );
 
   return (
-    <div className='flex flex-col items-center justify-center'>
-      <img src={logo} className="App-logo" alt="logo" />
-      <p className='text-textColor'>
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      <a
-        className="text-textColor-light hover:underline"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-      <p>The current time is {currentTime}.</p>
-
+    <div 
+      className='flex flex-col items-center justify-center'
+      style={{ minHeight: `calc(100vh - ${navbarHeight} - ${footerHeight})` }}
+    >
+      <p className='text-left pt-2 pb-2 text-xl font-bold w-full'>Listen Now</p>
+      <p className='text-left pt-1 pb-2 text-lg font-bold w-full'>Up Next<ArrowForwardIosIcon className='scale-50'/></p>
       <DigestsCarousel items={digestSequences}/>
     </div>
   )
