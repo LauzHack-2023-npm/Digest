@@ -35,6 +35,9 @@ flask run
 
 cd ../frontend-react-client
 npm run start
+# or
+# DANGEROUSLY_DISABLE_HOST_CHECK=true npm run start
+# See this issue: https://stackoverflow.com/questions/70374005/invalid-options-object-dev-server-has-been-initialized-using-an-options-object
 ```
 
 > The backend listens to port `4000` (because MacOS hijacks the default). If you want to change this, you need to modify the following files:
