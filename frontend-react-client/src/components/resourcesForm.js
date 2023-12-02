@@ -55,63 +55,11 @@ const DigestSequenceForm = () => {
         }
     };
 
-    const postDigestSequence = async () => {
-        try {
-            const response = await fetch('/api/time', {
-                method: 'GET',
-                // headers: {
-                //     'Content-Type': 'application/json', // Adjust content type based on your API requirements
-                // },
-                // body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            // Optionally, you can handle the response here if needed
-            const responseData = await response.json();
-            console.log(responseData);
-
-            // // You can reset the form data or perform other actions after a successful request
-            // setFormData({
-            //     digestName: '',
-            //     interestDescription: '',
-            //     contentFrequency: 'Weekly',
-            //     customFrequency: '',
-            //     narrationStyle: 'scientific',
-            //     customNarrationStyle: '',
-            //     selectedSources: {
-            //         wikipedia: false,
-            //         news: false,
-            //         archive: false,
-            //     },
-            //     customSources: ['', '', ''],
-            // });
-
-            // Optionally, you can navigate to another page or perform other actions
-            // after a successful request
-        } catch (error) {
-            console.error('Error sending data:', error);
-            // Optionally, you can handle errors and display a message to the user
-        }
-    };
-
-
-    return (<>
+    return (
         <form>
             <FormControl fullWidth margin="normal">
-                {/*<InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>*/}
-                {/*<Input*/}
-                {/*    id="digestName"*/}
-                {/*    name="digestName"*/}
-                {/*    value={formData.digestName}*/}
-                {/*    onChange={handleInputChange}*/}
-                {/*/>*/}
-                <InputLabel htmlFor="digestName"></InputLabel>
-                <TextField
-                    label="Name of Your Digest"
-                    // placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
+                <InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>
+                <Input
                     id="digestName"
                     name="digestName"
                     value={formData.digestName}
@@ -248,11 +196,6 @@ const DigestSequenceForm = () => {
             {/*    </MenuItem> : null}*/}
             {/*</FormControl>*/}
         </form>
-            <Box sx={{display: 'flex', justifyContent: 'center', marginY: 4}}>
-                <Button onClick={postDigestSequence} variant="outlined">Next</Button>
-            </Box>
-
-        </>
     );
 };
 

@@ -6,20 +6,24 @@ import Page2 from './pages/page2';
 import Navbar from './components/Navbar';
 import { ContextProvider } from './components/ContextProvider';
 import AddDigestPage from "./pages/add-digest";
+import Container from '@mui/material/Container';
+
 
 
 function App() {
 
   return (
     <div className="bg-background min-h-screen">
-      <BrowserRouter className="flex h-full w-full"> 
+      <BrowserRouter className="flex h-full w-full">
         <ContextProvider>
           <Navbar/>
-          <Routes>
-            <Route path="/" Component={HomePage}/>
-            <Route path="/page2" Component={Page2}/>
-            <Route path="/add-digest" Component={AddDigestPage}/>
-          </Routes>
+          <Container maxWidth="sm">
+              <Routes>
+                <Route path="/" Component={HomePage}/>
+                <Route path="/page2" Component={Page2}/>
+                <Route path="/add-digest" Component={AddDigestPage}/>
+              </Routes>
+          </Container>
         </ContextProvider>
       </BrowserRouter>
     </div>
