@@ -5,24 +5,34 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import PersonIcon from '@mui/icons-material/Person';
 
 
-const Navbar = () => {
-    return (
-        <nav className='flex flex-col items-center justify-center'>
-            <div>
-                <Link className="App-link" to="/">
-                    <HomeIcon/>
-                </Link>
-                &nbsp;|&nbsp;
-                <Link className="App-link" to="/add-digest">
-                    <PlaylistAddIcon/>
-                </Link>
-                &nbsp;|&nbsp;
-                <Link className="App-link" to="/user">
-                    <PersonIcon/>
-                </Link>
-            </div>
-        </nav>
-    )
-}
+const Navbar = ({ height }) => {
+  return (
+    <nav 
+      className='flex items-center justify-center bg-bgColor-dark text-textColor navbarComponent'
+      style={{ height: `${height}` }}
+    > 
+      <div className='flex justify-between w-full max-w-4xl px-5 navbarContent'>
+        <Link to={'/'}>
+          <div className='flex space-x-4 items-center'>
+            <img src='/logo512.png' alt='logo' className='h-14 w-14 p-1' />
+            <p className='font-bold font-mono text-xl'>Digest</p>
+          </div>
+        </Link>
+        <div className='flex space-x-12 items-center pr-10 text-lg'>
+          <Link className='hover:underline underline-offset-4' to='/'>
+            <HomeIcon/> Home
+          </Link>
+          <Link className='hover:underline underline-offset-4' to='/add-digest'>
+            <PlaylistAddIcon/> Add Digest
+          </Link>
+          <Link className='hover:underline underline-offset-4' to='/user'>
+            <PersonIcon/> Profile
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
-export default Navbar
+
+export default Navbar;
