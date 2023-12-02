@@ -1,19 +1,10 @@
 import React, {useState} from 'react';
-import {
-    FormControl,
-    InputLabel,
-    Input,
-    Select,
-    MenuItem,
-    Checkbox,
-    ListItemText,
-    TextField,
-    Button,
-    Box
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {useNavigate} from 'react-router-dom';
+import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 
 const DigestSequenceForm = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         digestName: '',
         digestDescription: '',
@@ -21,20 +12,12 @@ const DigestSequenceForm = () => {
         customFrequency: '',
         narrationStyle: 'scientific',
         customNarrationStyle: '',
-        // selectedSources: {
-        //     wikipedia: false,
-        //     news: false,
-        //     archive: false,
-        // },
-        // customSources: ['', '', ''],
     });
 
     const [showCustomSources, setShowCustomSources] = useState(0);
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-        console.log(name)
-        console.log(value)
         setFormData({
             ...formData,
             [name]: value,
@@ -58,8 +41,6 @@ const DigestSequenceForm = () => {
     };
 
     const postDigestSequence = async () => {
-        console.log('sending this:')
-        console.log(formData)
         try {
             const response = await fetch('/api/digest-sequence', {
                 method: 'POST',
@@ -73,49 +54,21 @@ const DigestSequenceForm = () => {
                 throw new Error('Network response was not ok');
             }
 
-            // Optionally, you can handle the response here if needed
             const responseData = await response.json();
-            console.log(responseData);
+            navigate('/set-resources',{ state: { digestSequence: responseData } });
 
-            // // You can reset the form data or perform other actions after a successful request
-            // setFormData({
-            //     digestName: '',
-            //     interestDescription: '',
-            //     contentFrequency: 'Weekly',
-            //     customFrequency: '',
-            //     narrationStyle: 'scientific',
-            //     customNarrationStyle: '',
-            //     selectedSources: {
-            //         wikipedia: false,
-            //         news: false,
-            //         archive: false,
-            //     },
-            //     customSources: ['', '', ''],
-            // });
 
-            // Optionally, you can navigate to another page or perform other actions
-            // after a successful request
         } catch (error) {
             console.error('Error sending data:', error);
-            // Optionally, you can handle errors and display a message to the user
         }
     };
-
 
     return (<>
         <form>
             <FormControl fullWidth margin="normal">
-                {/*<InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>*/}
-                {/*<Input*/}
-                {/*    id="digestName"*/}
-                {/*    name="digestName"*/}
-                {/*    value={formData.digestName}*/}
-                {/*    onChange={handleInputChange}*/}
-                {/*/>*/}
                 <InputLabel htmlFor="digestName"></InputLabel>
                 <TextField
                     label="Name of Your Digest"
-                    // placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
                     id="digestName"
                     name="digestName"
                     value={formData.digestName}
@@ -189,68 +142,6 @@ const DigestSequenceForm = () => {
                     />
                 )}
             </FormControl>
-
-            {/*<FormControl fullWidth margin="normal">*/}
-            {/*    <p>Used sources</p>*/}
-            {/*    {Object.keys(formData.selectedSources).map((source) => (*/}
-            {/*        <MenuItem key={source} value={source}>*/}
-            {/*            <Checkbox*/}
-            {/*                checked={formData.selectedSources[source]}*/}
-            {/*                onChange={() => handleCheckboxChange(source)}*/}
-            {/*            />*/}
-            {/*            <ListItemText primary={source}/>*/}
-            {/*        </MenuItem>*/}
-            {/*    ))}*/}
-            {/*    {showCustomSources > 0 ? <MenuItem hidden={true}>*/}
-            {/*        <Checkbox*/}
-            {/*            // checked={formData.selectedSources[source]}*/}
-            {/*            // onChange={() => handleCheckboxChange(source)}*/}
-            {/*        />*/}
-            {/*        <TextField*/}
-            {/*            id="custom-source-1"*/}
-            {/*            name="custom-source-1"*/}
-            {/*            label="Custom source"*/}
-            {/*            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"*/}
-            {/*            value={formData.interestDescription}*/}
-            {/*            onChange={handleInputChange}*/}
-            {/*        />*/}
-            {/*    </MenuItem> : null}*/}
-            {/*    {showCustomSources > 1 ? <MenuItem>*/}
-            {/*        <Checkbox*/}
-            {/*            // checked={formData.selectedSources[source]}*/}
-            {/*            // onChange={() => handleCheckboxChange(source)}*/}
-            {/*        />*/}
-            {/*        <TextField*/}
-            {/*            id="custom-source-2"*/}
-            {/*            name="custom-source-2"*/}
-            {/*            label="Custom source"*/}
-            {/*            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"*/}
-            {/*            value={formData.interestDescription}*/}
-            {/*            onChange={handleInputChange}*/}
-            {/*        />*/}
-            {/*    </MenuItem> : null}*/}
-            {/*    {showCustomSources > 2 ?*/}
-            {/*        <MenuItem>*/}
-            {/*            <Checkbox*/}
-            {/*                // checked={formData.selectedSources[source]}*/}
-            {/*                // onChange={() => handleCheckboxChange(source)}*/}
-            {/*            />*/}
-            {/*        <TextField*/}
-            {/*            id="custom-source-3"*/}
-            {/*            name="custom-source-3"*/}
-            {/*            label="Custom source"*/}
-            {/*            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"*/}
-            {/*            value={formData.interestDescription}*/}
-            {/*            onChange={handleInputChange}*/}
-            {/*        />*/}
-            {/*    </MenuItem> : null}*/}
-            {/*    {showCustomSources < 3 ? <MenuItem>*/}
-            {/*        <Button sx={{justifySelf: 'left'}} onClick={addCustomSource}>*/}
-            {/*            <AddIcon sx={{marginRight: 1}}/>*/}
-            {/*            Add custom source*/}
-            {/*        </Button>*/}
-            {/*    </MenuItem> : null}*/}
-            {/*</FormControl>*/}
         </form>
             <Box sx={{display: 'flex', justifyContent: 'center', marginY: 4}}>
                 <Button onClick={postDigestSequence} variant="outlined">Next</Button>

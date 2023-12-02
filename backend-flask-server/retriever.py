@@ -4,6 +4,11 @@ from datetime import date
 import datetime as DT
 import requests
 
+
+# TODO: 
+# - fix customFrequency
+# - fix customNarrationStyle
+
 class Retriever:
     def __init__(ABC):
         pass
@@ -16,35 +21,27 @@ class Retriever:
         raise NotImplementedError
     
 class ArxivRetriever(Retriever):
-    def fetch_data(self, topic, subtopic=None):
-    
-        base_url = 'http://export.arxiv.org/oai2'
-        
-        set_name = topic if subtopic is None else f"{topic}:{subtopic}"
+    def fetch_data(self, query, max_results=10):
+        base_url = 'http://export.arxiv.org/api/query?'
         
         # Construct a request to list records (e.g., recent submissions)
         params = {
-            'verb': 'ListRecords',
-            'metadataPrefix': 'arXiv',
-            'set': {set_name},
-            'from': str(date.today() - DT.timedelta(days=100)),
-            'until': str(date.today()),  # Use the current date as the end date
+            'search_query': query,
+            'start': 0,
+            'max_results': max_results,
         }
         
         response = requests.get(base_url, params=params)
 
         if response.status_code == 200:
-            # Parse the XML response
             root = ET.fromstring(response.text)
-
             data = []
-            # Extract information from the XML
-            for record in root.findall('.//{http://www.openarchives.org/OAI/2.0/}record'):
-                title = record.find('.//{http://arxiv.org/OAI/arXiv/}title').text
-                abstract = record.find('.//{http://arxiv.org/OAI/arXiv/}abstract').text
-                id = record.find('.//{http://arxiv.org/OAI/arXiv/}id').text
+            for record in root.findall('.//{http://www.w3.org/2005/Atom}entry'):
+                title = record.find('{http://www.w3.org/2005/Atom}title').text
+                abstract = record.find('{http://www.w3.org/2005/Atom}summary').text
+                id = record.find('{http://www.w3.org/2005/Atom}id').text
                 data.append({"id": id, "title": title, "abstract": abstract})
-                
+
             return {
                 'success': True,
                 'data': data,

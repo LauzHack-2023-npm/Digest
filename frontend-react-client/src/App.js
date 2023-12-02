@@ -7,6 +7,7 @@ import { ContextProvider } from './components/ContextProvider';
 import AddDigestPage from "./pages/add-digest";
 import Footer from './components/Footer';
 import ResponsiveAppBar from './components/ResponsiveNavbar';
+import ResourcesForm from "./components/resourcesForm";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
               <Route path="/" Component={HomePage}/>
               <Route path="/page2" Component={Page2}/>
               <Route path="/add-digest" Component={AddDigestPage}/>
+              <Route path="/set-resources" Component={ResourcesForm}/>
             </Routes>
           </div>
           <Footer/>
