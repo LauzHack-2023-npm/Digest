@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {Box, Button, Checkbox, FormControl, ListItemText, MenuItem, TextField} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,6 +9,7 @@ const ResourcesForm = () => {
     const {digestSequences, setDigestSequences} = useContext(DigestContext);
     const {state} = useLocation();
     const {digestSequence} = state;
+    const navigate = useNavigate();
 
     const [showCustomSources, setShowCustomSources] = useState(0);
     const [selectedSources, setSelectedSources] = useState(digestSequence.sources)
@@ -53,6 +54,8 @@ const ResourcesForm = () => {
             const responseData = await response.json();
             // updating context
             digestSequences.push(responseData)
+            // redirect home
+            navigate('/');
         } catch (error) {
             console.error('Error sending data:', error);
         }

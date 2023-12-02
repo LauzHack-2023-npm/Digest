@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { BrowserRouter as Router, Route, Switch, Link, useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField} from '@mui/material';
 
 const DigestSequenceForm = () => {

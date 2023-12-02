@@ -85,11 +85,15 @@ def post_digest_sequence():
     contentFrequency = request.args.get("customFrequency") if request.args.get("customFrequency") is not None and request.args.get("customFrequency") != "" else request.args.get("contentFrequency")
     narrationStyle = request.args.get("customNarrationStyle") if request.args.get("customNarrationStyle") is not None and request.args.get("customNarrationStyle") != "" else request.args.get("narrationStyle")
 
+    # TODO: we need openAI to recommend the sources here!
+
+
     return {
     'digestName': digestName,
     'digestDescription': digestDescription,
     'contentFrequency': contentFrequency,
     'narrationStyle': narrationStyle,
+#    TODO: these are hardcoded, recommend us other sources
     'sources': [
         {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
         {'name': 'arxive', 'url': 'https://arxiv.org/'}
@@ -105,8 +109,6 @@ def post_sources():
     narrationStyle = data.get("customNarrationStyle") if data.get("customNarrationStyle") is not None and data.get("customNarrationStyle") != "" else data.get("narrationStyle")
     sources = data.get("sources")
     customSources = data.get("customSources")
-
-    # TODO: create real sources recommendations
 
     return {
     'digestName': digestName,
