@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/home';
 import Page2 from './pages/page2';
-import Navbar from './components/navbar';
 import { ContextProvider } from './components/ContextProvider';
 import AddDigestPage from "./pages/add-digest";
 import Footer from './components/Footer';
