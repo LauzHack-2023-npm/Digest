@@ -5,6 +5,8 @@ import HomePage from './pages/home';
 import Page2 from './pages/page2';
 import Navbar from './components/Navbar';
 import { ContextProvider } from './components/ContextProvider';
+import AddDigestPage from "./pages/add-digest";
+
 
 function App() {
 
@@ -16,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" Component={HomePage}/>
             <Route path="/page2" Component={Page2}/>
+            <Route path="/add-digest" Component={AddDigestPage}/>
           </Routes>
         </ContextProvider>
       </BrowserRouter>
