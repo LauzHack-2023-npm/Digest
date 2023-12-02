@@ -1,57 +1,32 @@
+import json
 import os
-from flask import Flask, jsonify, request
 import openai
-from retriever import ArxivRetriever, WikiRetriever
-from utils import generateKeyword, getSourceName
+from flask import Flask, jsonify, request
+from utils import generate_digest_data, generateKeyword, getSourceName
 
 app = Flask(__name__)
 
-@app.route('/api/digest', methods = ['POST'])
-def post_digest():
+@app.route('/api/generate-digest-podcast', methods = ['POST'])
+def generate_digest_podcast():
     digestName = request.args.get("digestName")
     digestDescription = request.args.get("digestDescription")
 
-    # get source name
-    source_name = getSourceName(digestName, digestDescription)
+    results = generate_digest_data(digestName, digestDescription)
+    results = results.json
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
     
-    keyword = generateKeyword(digestName, digestDescription)
-    print("keyword: ", keyword)
+    prompt = "You: \
+    You are given some data: '{}'. take the 3 article you find the most interesting and write a podcast script, based on the knowledge I gave you. Just print the text of the podcast itself.\
+    \nAI:".format(results)
     
-    if source_name == "wikipedia":
-        # get wikipedia articles
-        retriever = WikiRetriever()
-        result = retriever.fetch_data(keyword)
-        if result['success']:
-            data = result['data']
-            return jsonify(data)
-        else:
-            return jsonify({"error": result['error']})
-    elif source_name == "arxiv":
-        # get arxiv articles
-        retriever = ArxivRetriever()
-        result = retriever.fetch_data(keyword)
-        if result['success']:
-            data = result['data']
-            return jsonify(data)
-        else:
-            return jsonify({"error": result['error']})
-    else:
-        return jsonify({"error": "wrong source name"})
-    
-
-### DATA ROUTES ###
-@app.route('/api/data/wiki')
-def get_wiki_content():
-    topic = request.args.get('topic', 'French revolution')
-    num_results = int(request.args.get('num_results', 10))
-    retriever = WikiRetriever()
-    result = retriever.fetch_data(topic, num_results)
-    if result['success']:
-        data = result['data']
-        return jsonify(data)
-    else:
-        return jsonify({"error": result['error']})
-    
+    response = openai.Completion.create(
+        model="gpt-3.5-turbo-instruct",  # Specify the model
+        prompt=prompt,
+        temperature=0.7,  # Controls the randomness of the output
+        max_tokens=2000  # Limit the length of the response
+    )
+    response = response['choices'][0]['text'].strip()
+    return jsonify(response)
     
 @app.route('/api/get-dummy-digest-sequences')
 def get_dummy_digest_sequences():
@@ -63,20 +38,6 @@ def get_dummy_digest_sequences():
         {"hello": "world5"},
     ]
     return jsonify(digest_sequences)
-
-@app.route("/api/data/arxiv")
-def get_arxiv_articles():
-    topic = request.args.get('topic', 'cs')
-    limit = int(request.args.get('limit', 10))
-
-    retriever = ArxivRetriever()
-    result = retriever.fetch_data(topic, limit)
-
-    if result['success']:
-        data = result['data']
-        return jsonify(data)
-    else:
-        return jsonify({"error": result['error']})
     
 @app.route('/api/digest-sequence', methods = ['POST'])
 def post_digest_sequence():
@@ -95,6 +56,16 @@ def post_digest_sequence():
             {'name': 'arxive', 'url': 'https://arxiv.org/'}
         ]
     }
+    
+@app.route('/api/get-source')
+# get prompt of the user
+# returns possible sources
+def get_possible_sources():
+    return jsonify([
+        {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
+        {'name': 'arxive', 'url': 'https://arxiv.org/'}
+    ])
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

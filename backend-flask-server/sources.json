@@ -1,0 +1,10 @@
+[
+    {
+        "name": "wikipedia",
+        "base_url": "http://en.wikipedia.org/?curid="
+    },
+    {
+        "name": "arxiv",
+        "base_url": "https://arxiv.org/abs/"
+    }
+]

@@ -1,11 +1,13 @@
-import openai
 import os
+import openai
+from flask import jsonify
 
-# returns the source name => whether wikipedia or arxiv
+from retrievers.retriever import ArxivRetriever, WikiRetriever
+
+# returns the most approptiate sources based on user input
 def getSourceName(digestName, digestDescription):
     openai.api_key = os.environ.get("OPENAI_API_KEY")
     prompt = "You: You are given a 'digestName' which is '{}' and a 'digestDescription', which is '{}'. I have two types of sources on my disposal, wikipedia or arxiv. Depending of what I gave me, answer me if I need to search whether in wikipedia or in arxiv. Your answer should just be 'wikipedia' or 'arxiv'\nAI:".format(digestName, digestDescription)
-    print(prompt)
     response = openai.Completion.create(
         model="text-davinci-003",  # Specify the model
         prompt=prompt,
@@ -15,12 +17,12 @@ def getSourceName(digestName, digestDescription):
     
     ai_reply = response['choices'][0]['text'].strip().lower()
     
+    print(ai_reply)
     return ai_reply
 
 def generateKeyword(digestName, digestDescription):
     openai.api_key = os.environ.get("OPENAI_API_KEY")
     prompt = "You: You are given a 'digestName' which is '{}' and a 'digestDescription', which is '{}'. I need you to generate one keyword for me. Your answer should be this keyword\nAI:".format(digestName, digestDescription)
-    print(prompt)
     response = openai.Completion.create(
         model="text-davinci-003",  # Specify the model
         prompt=prompt,
@@ -29,5 +31,31 @@ def generateKeyword(digestName, digestDescription):
     )
     
     ai_reply = response['choices'][0]['text'].strip().lower()
-    
+
+    print(ai_reply)
     return ai_reply
+
+def generate_digest_data(digestName, digestDescription):
+    source_name = getSourceName(digestName, digestDescription)
+    keyword = generateKeyword(digestName, digestDescription)
+    
+    if source_name == "wikipedia":
+        # get wikipedia articles
+        retriever = WikiRetriever()
+        result = retriever.fetch_data(keyword)
+        if result['success']:
+            data = result['data']
+            return jsonify(data)
+        else:
+            return jsonify({"error": result['error']})
+    elif source_name == "arxiv":
+        # get arxiv articles
+        retriever = ArxivRetriever()
+        result = retriever.fetch_data(keyword)
+        if result['success']:
+            data = result['data']
+            return jsonify(data)
+        else:
+            return jsonify({"error": result['error']})
+    else:
+        return jsonify({"error": "wrong source name"})
