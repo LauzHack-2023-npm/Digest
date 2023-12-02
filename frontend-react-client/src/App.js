@@ -6,7 +6,7 @@ import Page2 from './pages/page2';
 import { ContextProvider } from './components/ContextProvider';
 import AddDigestPage from "./pages/add-digest";
 import Footer from './components/Footer';
-import Navbar from "./components/navbar";
+import ResponsiveAppBar from './components/ResponsiveNavbar';
 
 
 function App() {
@@ -18,7 +18,8 @@ function App() {
     <div className="bg-background min-h-screen">
       <BrowserRouter className="flex h-full w-full">
         <ContextProvider>
-          <Navbar height={navbarHeight}/>
+          {/* <Navbar height={navbarHeight}/> */}
+          <ResponsiveAppBar/>
           <div className="m-auto max-w-2xl">
             <Routes>
               <Route path="/" element={<HomePage navbarHeight={navbarHeight} footerHeight={footerHeight}/>}/>
