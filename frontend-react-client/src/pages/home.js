@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import logo from '../logo.svg';
 import { DigestContext } from '../components/ContextProvider';
+import DigestCard from '../components/DigestCard';
+import DigestsCarousel from '../components/DigestsCarousel';
 
 const HomePage = () => {
 
@@ -39,6 +41,8 @@ const HomePage = () => {
         Learn React
       </a>
       <p>The current time is {currentTime}.</p>
+
+      <DigestsCarousel items={digestSequences}/>
     </div>
   )
 }
