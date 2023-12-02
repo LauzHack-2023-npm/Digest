@@ -27,7 +27,7 @@ class ArxivRetriever(Retriever):
             'verb': 'ListRecords',
             'metadataPrefix': 'arXiv',
             'set': {set_name},
-            'from': str(date.today() - DT.timedelta(days=1000)),
+            'from': str(date.today() - DT.timedelta(days=100)),
             'until': str(date.today()),  # Use the current date as the end date
         }
         
@@ -37,17 +37,17 @@ class ArxivRetriever(Retriever):
             # Parse the XML response
             root = ET.fromstring(response.text)
 
-            text_contents = []
+            data = []
             # Extract information from the XML
             for record in root.findall('.//{http://www.openarchives.org/OAI/2.0/}record'):
                 title = record.find('.//{http://arxiv.org/OAI/arXiv/}title').text
                 abstract = record.find('.//{http://arxiv.org/OAI/arXiv/}abstract').text
-                print(title)
-                text_contents.append({"title": title, "abstract": abstract})
-            
+                id = record.find('.//{http://arxiv.org/OAI/arXiv/}id').text
+                data.append({"id": id, "title": title, "abstract": abstract})
+                
             return {
                 'success': True,
-                'text_contents': text_contents
+                'data': data,
             }
         else:
             return {
@@ -75,7 +75,8 @@ class WikiRetriever(Retriever):
         
             if 'query' in data and 'search' in data['query']:
                 articles = data['query']['search']
-                text_contents = []
+                
+                data_array = []
 
                 for article in articles:
                     page_title = article['title']
@@ -97,12 +98,13 @@ class WikiRetriever(Retriever):
 
                     for page_id, page_info in pages.items():
                         text_content = page_info.get('extract', '').strip()
+                        title = page_info.get('title', '')
                         if text_content:
-                            text_contents.append(text_content)
+                            data_array.append({'id': page_id, 'abstract': text_content, 'title': title})
 
                 return {
                     'success': True,
-                    'text_contents': text_contents
+                    'data': data_array,
                 }
 
             else:
