@@ -16,23 +16,25 @@ import AddIcon from '@mui/icons-material/Add';
 const DigestSequenceForm = () => {
     const [formData, setFormData] = useState({
         digestName: '',
-        interestDescription: '',
-        contentFrequency: 'Weekly',
+        digestDescription: '',
+        contentFrequency: 'weekly',
         customFrequency: '',
         narrationStyle: 'scientific',
         customNarrationStyle: '',
-        selectedSources: {
-            wikipedia: false,
-            news: false,
-            archive: false,
-        },
-        customSources: ['', '', ''],
+        // selectedSources: {
+        //     wikipedia: false,
+        //     news: false,
+        //     archive: false,
+        // },
+        // customSources: ['', '', ''],
     });
 
     const [showCustomSources, setShowCustomSources] = useState(0);
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
+        console.log(name)
+        console.log(value)
         setFormData({
             ...formData,
             [name]: value,
@@ -56,13 +58,15 @@ const DigestSequenceForm = () => {
     };
 
     const postDigestSequence = async () => {
+        console.log('sending this:')
+        console.log(formData)
         try {
-            const response = await fetch('/api/time', {
-                method: 'GET',
-                // headers: {
-                //     'Content-Type': 'application/json', // Adjust content type based on your API requirements
-                // },
-                // body: JSON.stringify(formData),
+            const response = await fetch('/api/digest-sequence', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
 
             if (!response.ok) {
@@ -120,15 +124,15 @@ const DigestSequenceForm = () => {
             </FormControl>
 
             <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="interestDescription"></InputLabel>
+                <InputLabel htmlFor="digestDescription"></InputLabel>
                 <TextField
-                    id="interestDescription"
-                    name="interestDescription"
+                    id="digestDescription"
+                    name="digestDescription"
                     label="Describe your interest"
                     placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
                     multiline
                     rows={4}
-                    value={formData.interestDescription}
+                    value={formData.digestDescription}
                     onChange={handleInputChange}
                 />
             </FormControl>
@@ -149,7 +153,7 @@ const DigestSequenceForm = () => {
                     <MenuItem value="other">Other</MenuItem>
                 </Select>
                 {formData.contentFrequency === 'other' && (
-                    <TextField
+                    <TextField sx={{marginY: 1}}
                         id="customFrequency"
                         name="customFrequency"
                         placeholder="Specify frequency"
@@ -176,7 +180,7 @@ const DigestSequenceForm = () => {
 
                 </Select>
                 {(formData.narrationStyle === 'other') && (
-                    <TextField
+                    <TextField sx={{marginY: 1}}
                         id="customNarrationStyle"
                         name="customNarrationStyle"
                         placeholder="Specify narration style"
