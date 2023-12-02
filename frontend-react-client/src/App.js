@@ -7,12 +7,10 @@ import { ContextProvider } from './components/ContextProvider';
 import AddDigestPage from "./pages/add-digest";
 import Footer from './components/Footer';
 import ResponsiveAppBar from './components/ResponsiveNavbar';
+import ResourcesForm from "./components/resourcesForm";
 
 
 function App() {
-
-  const navbarHeight = "52px";
-  const footerHeight = "48px";
 
   return (
     <div className="bg-background min-h-screen">
@@ -20,14 +18,15 @@ function App() {
         <ContextProvider>
           {/* <Navbar height={navbarHeight}/> */}
           <ResponsiveAppBar/>
-          <div className="m-auto max-w-2xl">
+          <div className="m-auto max-w-2xl min-h-screen">
             <Routes>
-              <Route path="/" element={<HomePage navbarHeight={navbarHeight} footerHeight={footerHeight}/>}/>
+              <Route path="/" Component={HomePage}/>
               <Route path="/page2" Component={Page2}/>
               <Route path="/add-digest" Component={AddDigestPage}/>
+              <Route path="/set-resources" Component={ResourcesForm}/>
             </Routes>
           </div>
-          <Footer height={footerHeight}/>
+          <Footer/>
         </ContextProvider>
       </BrowserRouter>
     </div>

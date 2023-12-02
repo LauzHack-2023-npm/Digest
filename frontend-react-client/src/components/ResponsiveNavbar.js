@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import Image from "material-ui-image";
 import { Link } from 'react-router-dom';
 
 const pagesDict = {
@@ -45,10 +46,14 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <Toolbar disableGutters className='max-w-2xl m-auto'>
+          <img 
+            src={process.env.PUBLIC_URL + '/digest-logo-1_380x519.png'}
+            // sx={{ display: { xs: 'none', md: 'flex' }, mr: 1}}
+            className='h-10 mr-1 hidden lg:flex'  
+          />
           <Typography
             variant="h6"
             noWrap
@@ -64,7 +69,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DIGEST
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -97,15 +102,19 @@ function ResponsiveAppBar() {
               }}
             >
               {Object.keys(pagesDict).map((pageName, idx) => (
-                <Link to={pagesDict[pageName]}>
-                  <MenuItem key={pageName} onClick={handleCloseNavMenu}>
+                <Link key={pageName} to={pagesDict[pageName]}>
+                  <MenuItem onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{pageName}</Typography>
                   </MenuItem>
                 </Link>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
+          <img 
+            src={process.env.PUBLIC_URL + '/digest-logo-1_380x519.png'}
+            className='h-10 mr-2 flex lg:hidden'  
+          />
           <Typography
             variant="h5"
             noWrap
@@ -126,9 +135,8 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {Object.keys(pagesDict).map((pageName, idx) => (
-              <Link to={pagesDict[pageName]}>
+              <Link key={pageName} to={pagesDict[pageName]}>
                 <Button
-                  key={pageName}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
@@ -141,7 +149,9 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                {/* TODO add avatar img PHilipp  */}
+                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                <Avatar alt="Pemy Sharp" src={process.env.PUBLIC_URL + '/avatar.jpg'} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -161,8 +171,8 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {Object.keys(settingsDict).map((setting, idx) => (
-                <Link to={settingsDict[setting]}>
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <Link key={setting} to={settingsDict[setting]}>
+                  <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 </Link>

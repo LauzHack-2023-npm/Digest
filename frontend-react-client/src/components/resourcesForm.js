@@ -1,53 +1,23 @@
-import React, {useState} from 'react';
-import {
-    FormControl,
-    InputLabel,
-    Input,
-    Select,
-    MenuItem,
-    Checkbox,
-    ListItemText,
-    TextField,
-    Button,
-    Box
-} from '@mui/material';
+import React, {useContext, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {Box, Button, Checkbox, FormControl, ListItemText, MenuItem, TextField} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {DigestContext} from "./ContextProvider";
 
-const DigestSequenceForm = () => {
-    const [formData, setFormData] = useState({
-        digestName: '',
-        interestDescription: '',
-        contentFrequency: 'Weekly',
-        customFrequency: '',
-        narrationStyle: 'scientific',
-        customNarrationStyle: '',
-        selectedSources: {
-            wikipedia: false,
-            news: false,
-            archive: false,
-        },
-        customSources: ['', '', ''],
-    });
+const ResourcesForm = () => {
+    const {digestSequences, setDigestSequences} = useContext(DigestContext);
+    const {state} = useLocation();
+    const {digestSequence} = state;
+    const navigate = useNavigate();
 
     const [showCustomSources, setShowCustomSources] = useState(0);
-
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleCheckboxChange = (source) => {
-        setFormData({
-            ...formData,
-            selectedSources: {
-                ...formData.selectedSources,
-                [source]: !formData.selectedSources[source],
-            },
-        });
-    };
+    const [selectedSources, setSelectedSources] = useState(digestSequence.sources)
+    const [customSources, setCustomSources] = useState({
+        'custom-source-1': '',
+        'custom-source-2': '',
+        'custom-source-3': ''
+    })
 
     const addCustomSource = () => {
         if (showCustomSources < 3) {
@@ -55,148 +25,151 @@ const DigestSequenceForm = () => {
         }
     };
 
+    const postSources = async () => {
+        const body = {
+            ...digestSequence,
+            sources: selectedSources,
+            customSources: customSources
+        }
+
+        try {
+            const response = await fetch('/api/sources', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(
+                    {
+                        ...digestSequence,
+                        sources: selectedSources,
+                        customSources: customSources
+                    }
+                ),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const responseData = await response.json();
+            // updating context
+            digestSequences.push(responseData)
+            // redirect home
+            navigate('/');
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
+    };
+
+    const removeCustomSource = (index) => {
+        setCustomSources((prevSources) => {
+            const updatedSources = {...prevSources};
+            delete updatedSources[`custom-source-${index}`];
+            const valuesArray = Object.values(updatedSources);
+
+            const result = {
+                'custom-source-1': '',
+                'custom-source-2': '',
+                'custom-source-3': ''
+            }
+
+            valuesArray.map((value, i) => {
+                result[`custom-source-${i + 1}`] = value
+            })
+
+            setShowCustomSources((prevCount) => prevCount - 1);
+            return result;
+        });
+    };
+
+    const handleInputChange = (e) => {
+        const {name, value} = e.target;
+        setCustomSources((prevSources) => ({
+            ...prevSources,
+            [name]: value
+        }));
+    };
+
+    const handleCheckboxChange = (source) => {
+        const existingSource = selectedSources.find(item => item.name === source.name);
+
+        if (existingSource) {
+            // If the source is already present, remove it
+            const updatedSources = selectedSources.filter(item => item.name !== source.name);
+            setSelectedSources(updatedSources);
+        } else {
+            // If the source is not present, add it
+            const updatedSources = [...selectedSources, source];
+            setSelectedSources(updatedSources);
+        }
+    };
+
     return (
-        <form>
-            <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>
-                <Input
-                    id="digestName"
-                    name="digestName"
-                    value={formData.digestName}
-                    onChange={handleInputChange}
-                />
-            </FormControl>
+        <>
+            <form>
+                <FormControl fullWidth margin="normal">
+                    <p>Used sources</p>
+                    {digestSequence.sources.map((source) => (
+                        <MenuItem key={source} value={source}>
+                            <Checkbox
+                                checked={selectedSources.find(item => item.name === source.name)}
+                                onChange={() => handleCheckboxChange(source)}
+                            />
+                            <ListItemText primary={source.name}/>
+                        </MenuItem>
+                    ))}
+                    {showCustomSources > 0 ? <MenuItem>
+                        <Button value={'1'} onClick={() => removeCustomSource(1)}>
+                            <DeleteIcon/>
+                        </Button>
+                        <TextField
+                            id="custom-source-1"
+                            name="custom-source-1"
+                            label="Custom source"
+                            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"
+                            onChange={handleInputChange}
+                        />
+                    </MenuItem> : null}
+                    {showCustomSources > 1 ? <MenuItem>
+                        <Button value={'2'} onClick={() => removeCustomSource(2)}>
+                            <DeleteIcon/>
+                        </Button>
+                        <TextField
+                            id="custom-source-2"
+                            name="custom-source-2"
+                            label="Custom source"
+                            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"
+                            onChange={handleInputChange}
+                        />
+                    </MenuItem> : null}
+                    {showCustomSources > 2 ?
+                        <MenuItem>
+                            <Button value={'3'} onClick={() => removeCustomSource(3)}>
+                                <DeleteIcon/>
+                            </Button>
+                            <TextField
+                                id="custom-source-3"
+                                name="custom-source-3"
+                                label="Custom source"
+                                placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"
+                                onChange={handleInputChange}
+                            />
+                        </MenuItem> : null}
+                    {showCustomSources < 3 ? <MenuItem>
+                        <Button sx={{justifySelf: 'left'}} onClick={addCustomSource}>
+                            <AddIcon sx={{marginRight: 1}}/>
+                            Add custom source
+                        </Button>
+                    </MenuItem> : null}
+                </FormControl>
+            </form>
+            <Box sx={{display: 'flex', justifyContent: 'center', marginY: 4}}>
+                <Button onClick={postSources} variant="outlined">Generate Digest</Button>
+            </Box>
+        </>
 
-            <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="interestDescription"></InputLabel>
-                <TextField
-                    id="interestDescription"
-                    name="interestDescription"
-                    label="Describe your interest"
-                    placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
-                    multiline
-                    rows={4}
-                    value={formData.interestDescription}
-                    onChange={handleInputChange}
-                />
-            </FormControl>
-
-            <FormControl fullWidth margin="normal">
-                <InputLabel id="frequency-label">Frequency</InputLabel>
-                <Select
-                    labelId="frequency-label"
-                    label="Frequency"
-                    id="contentFrequency"
-                    name="contentFrequency"
-                    value={formData.contentFrequency}
-                    onChange={handleInputChange}
-                >
-                    <MenuItem value="weekly">Weekly</MenuItem>
-                    <MenuItem value="daily">Daily</MenuItem>
-                    <MenuItem value="biweekly">Biweekly</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-                </Select>
-                {formData.contentFrequency === 'other' && (
-                    <TextField
-                        id="customFrequency"
-                        name="customFrequency"
-                        placeholder="Specify frequency"
-                        value={formData.customFrequency}
-                        onChange={handleInputChange}
-                    />
-                )}
-            </FormControl>
-
-            <FormControl fullWidth margin="normal">
-                <InputLabel id="narration-label">Narration</InputLabel>
-                <Select
-                    labelId="narration-label"
-                    label="Narration"
-                    id="narrationStyle"
-                    name="narrationStyle"
-                    value={formData.narrationStyle}
-                    onChange={handleInputChange}
-                >
-                    <MenuItem value="scientific">Scientific</MenuItem>
-                    <MenuItem value="easyLanguage">Easy Language</MenuItem>
-                    <MenuItem value="funMode">Fun Mode</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-
-                </Select>
-                {(formData.narrationStyle === 'other') && (
-                    <TextField
-                        id="customNarrationStyle"
-                        name="customNarrationStyle"
-                        placeholder="Specify narration style"
-                        value={formData.customNarrationStyle}
-                        onChange={handleInputChange}
-                    />
-                )}
-            </FormControl>
-
-            {/*<FormControl fullWidth margin="normal">*/}
-            {/*    <p>Used sources</p>*/}
-            {/*    {Object.keys(formData.selectedSources).map((source) => (*/}
-            {/*        <MenuItem key={source} value={source}>*/}
-            {/*            <Checkbox*/}
-            {/*                checked={formData.selectedSources[source]}*/}
-            {/*                onChange={() => handleCheckboxChange(source)}*/}
-            {/*            />*/}
-            {/*            <ListItemText primary={source}/>*/}
-            {/*        </MenuItem>*/}
-            {/*    ))}*/}
-            {/*    {showCustomSources > 0 ? <MenuItem hidden={true}>*/}
-            {/*        <Checkbox*/}
-            {/*            // checked={formData.selectedSources[source]}*/}
-            {/*            // onChange={() => handleCheckboxChange(source)}*/}
-            {/*        />*/}
-            {/*        <TextField*/}
-            {/*            id="custom-source-1"*/}
-            {/*            name="custom-source-1"*/}
-            {/*            label="Custom source"*/}
-            {/*            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"*/}
-            {/*            value={formData.interestDescription}*/}
-            {/*            onChange={handleInputChange}*/}
-            {/*        />*/}
-            {/*    </MenuItem> : null}*/}
-            {/*    {showCustomSources > 1 ? <MenuItem>*/}
-            {/*        <Checkbox*/}
-            {/*            // checked={formData.selectedSources[source]}*/}
-            {/*            // onChange={() => handleCheckboxChange(source)}*/}
-            {/*        />*/}
-            {/*        <TextField*/}
-            {/*            id="custom-source-2"*/}
-            {/*            name="custom-source-2"*/}
-            {/*            label="Custom source"*/}
-            {/*            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"*/}
-            {/*            value={formData.interestDescription}*/}
-            {/*            onChange={handleInputChange}*/}
-            {/*        />*/}
-            {/*    </MenuItem> : null}*/}
-            {/*    {showCustomSources > 2 ?*/}
-            {/*        <MenuItem>*/}
-            {/*            <Checkbox*/}
-            {/*                // checked={formData.selectedSources[source]}*/}
-            {/*                // onChange={() => handleCheckboxChange(source)}*/}
-            {/*            />*/}
-            {/*        <TextField*/}
-            {/*            id="custom-source-3"*/}
-            {/*            name="custom-source-3"*/}
-            {/*            label="Custom source"*/}
-            {/*            placeholder="e.g., https://www.swisscom.ch/de/privatkunden/internet"*/}
-            {/*            value={formData.interestDescription}*/}
-            {/*            onChange={handleInputChange}*/}
-            {/*        />*/}
-            {/*    </MenuItem> : null}*/}
-            {/*    {showCustomSources < 3 ? <MenuItem>*/}
-            {/*        <Button sx={{justifySelf: 'left'}} onClick={addCustomSource}>*/}
-            {/*            <AddIcon sx={{marginRight: 1}}/>*/}
-            {/*            Add custom source*/}
-            {/*        </Button>*/}
-            {/*    </MenuItem> : null}*/}
-            {/*</FormControl>*/}
-        </form>
-    );
+    )
+        ;
 };
 
-export default DigestSequenceForm;
+export default ResourcesForm;
