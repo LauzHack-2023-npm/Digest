@@ -1,4 +1,6 @@
-# awesome-react-flask-docker
+# Digest
+
+# awesome-react-flask-Docker
 Hackathon template with a React frontend and Flask backend. Docker containers for easy deployment.
 
 Libraries already included:
