@@ -1,6 +1,6 @@
 import json
 import os
-import openai
+from openai import OpenAI
 from flask import Flask, jsonify, request
 from utils import generate_digest_data, getSourceName
 from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
@@ -73,25 +73,44 @@ def generate_digest_content():
 
         digestName = data.get("digestName")
         digestDescription = data.get("digestDescription")
-        narrationStyle = data.get("narrationStyle")
+        narrationStyle = data.get("narrationStyle", "scientific")
 
         results = generate_digest_data(digestName, digestDescription)
         results = results.json
 
+        client = OpenAI()
+        # client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         conversation_prompt = [
-            {"role": "system", "content": f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself."},
+            # {"role": "user", "content": f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself."},
+            {"role": "user", "content": f"You: Use this information as a knowledge base: '{results}'. Create a script for a podcast, as scientific overview of the topics, based on the top 3 articles you find the most interesting. It should be done in a {narrationStyle} style. Your answer should be the text of the podcast itself."},
         ]
-        client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo-instruct",#"gpt-3.5-turbo-16k",
-            temperature=0.7,
-            max_tokens=2000,
+            model="gpt-3.5-turbo-1106",
             messages=conversation_prompt
         )
-        client.close()
+        
+        text_response = response.choices[0].message.content
+        print("text_response:", text_response)
+        
+        title_prompt = [{"role": "user","content": f"You: Provide me with a title for this podcast script: {text_response}. Your answer should be the title of the podcast script."}]
+        summary_prompt = [{"role": "user","content": f"You: Provide me with a summary for this podcast script: {text_response}. Your answer should be the summary of the podcast script."}]
 
-        result_json = response.choices[0].message.content
-        result_dict = json.loads(result_json)
+        title_response = client.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=title_prompt,
+        )
+        
+        summary_response = client.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=summary_prompt,
+        )
+        
+        print(title_response)
+        print(summary_response)
+        
+        # print(response)
+        # result_json = response.choices[0].message.content
+        # result_dict = json.loads(result_json)
         
         episode_name = "TODO"
         episode_summary = "TODO"
