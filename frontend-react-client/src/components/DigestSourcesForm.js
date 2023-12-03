@@ -73,7 +73,7 @@ const DigestSourcesForm = () => {
       const completeDigest = await response.json();
       console.log('[DigestSourcesForm] Complete digest:', completeDigest);
       // updating context
-      setDigestSequences([...digestSequences, completeDigest]);
+      setDigestSequences([completeDigest, ...digestSequences]);
     } catch (error) {
       console.error('Error sending data:', error);
     }
