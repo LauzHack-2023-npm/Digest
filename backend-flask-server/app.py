@@ -2,7 +2,8 @@ import json
 import os
 import openai
 from flask import Flask, jsonify, request, g
-from utils import generate_digest_data, generateKeyword, getSourceName, DUMMY_DIGEST_SEQUENCE, create_digest_dict
+from utils import generate_digest_data, generateKeyword, getSourceName
+from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
 
 app = Flask(__name__)
 
