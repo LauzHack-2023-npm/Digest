@@ -7,6 +7,7 @@ from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
 import datetime
 from text_to_image import text_to_img
 from text_to_speech import text_to_speech
+from mutagen.mp3 import MP3
 
 
 app = Flask(__name__)
@@ -95,15 +96,11 @@ def generate_digest_content():
         episode_name = "TODO"
         episode_summary = "TODO"
 
-        # TODO to text-2-speech here. Input: episode_summary. Output: episode_mp3_path. Save the file under some local folder
-
-        # TODO to text-2-img here. Input: title or episode_summary. Output: img path. Save the file under the frontend's public folder --> maybe create a new folder there and put it in the gitignore
-
         script = "TODO"
 
         episode_mp3_path = text_to_speech(script)
         episode_img_url = text_to_img("it is a cover for a podcast episode with about this topic: " + episode_summary)
-        episode_duration = "TODO"
+        episode_duration = MP3(episode_mp3_path).info.length  # duration in seconds
 
         new_episode = create_episode_dict(
             episode_name,
@@ -153,12 +150,6 @@ def generate_digest_content():
 #     'sources': sources,
 #     'customSources': customSources
 #     }
-
-@app.route('/test', methods=['POST'])
-def tt_speech():
-    audio = text_to_speech('Oh wow JB is still sleeping')
-    return jsonify({"audio": audio})
-
 
 
 if __name__ == '__main__':
