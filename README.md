@@ -1,6 +1,12 @@
 # Digest
+<<<<<<< HEAD
 
 > Digest: Where Ideas Speak to You.
+=======
+https://youtu.be/rAXkra7h3kw
+# awesome-react-flask-Docker
+Hackathon template with a React frontend and Flask backend. Docker containers for easy deployment.
+>>>>>>> 1c303293843fe6d37a8216e3a6f5f7666d39e04b
 
 ## What is does
 
