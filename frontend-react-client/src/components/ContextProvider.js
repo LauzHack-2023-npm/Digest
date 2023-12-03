@@ -12,6 +12,7 @@ export const ContextProvider = ({ children }) => {
   // { ... TODO
 
   useEffect(() => {
+    console.log("Fetching dummy digest sequences from the backend")
     // Fetch the dummy digest sequences from the backend
     fetch('/api/get-dummy-digest-sequences')
       .then(response => response.json())
