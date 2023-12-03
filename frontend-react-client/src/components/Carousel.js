@@ -27,13 +27,11 @@ const Carousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
         <ArrowBackIosIcon onClick={() => slider.current.slickPrev()} className={`${sliderButtonClassName} left-0`} />
         : null
       }
-      <Slider {...settings} ref={slider} className='px-2 overflow-visible'>
+      <Slider {...settings} ref={slider} className='px-1 overflow-visible'>
         {
           items.map((item, idx) => {
             return (
-              //<div key={idx} className='flex items-center justify-center h-full'>
-              <EpisodeCard key={idx} className='' item={item} />
-              //</div>
+              <EpisodeCard key={idx} className='m-1 w-40' item={item} />
             );
           })
         }

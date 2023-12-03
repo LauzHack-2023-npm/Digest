@@ -17,12 +17,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const pagesDict = {
   "Home": '/',
-  "Create Digest": '/add-digest',
-  "Profile": '/user',
+  "Create A Digest": '/add-digest',
 };
 
 const settingsDict = {
-  "Profile": '/user',
+  "Profile": '/',
   "Logout": '/',
 };
 

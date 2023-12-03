@@ -39,7 +39,7 @@ const EpisodeCard = ({ item, className }) => {
 
   return (
     <Card className={`${className}`}>
-      <CardMedia component="img" alt="Episode Image" height="140" image={imageUrl} />
+      <CardMedia component="img" alt="Episode Image" image={imageUrl} />
       <CardContent>
         <Typography variant="h5" component="div">
           {title}
