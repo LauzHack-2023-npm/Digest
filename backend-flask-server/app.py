@@ -112,7 +112,7 @@ def generate_digest_content():
         episode_summary = summary
 
         episode_mp3_path = text_to_speech(script)
-        episode_img_url = text_to_img("it is a cover for a podcast episode with about this topic: " + episode_summary)
+        episode_img_url = text_to_img("A cover for a podcast episode on: " + episode_summary)
         episode_duration = MP3(episode_mp3_path).info.length  # duration in seconds
 
         new_episode = create_episode_dict(
