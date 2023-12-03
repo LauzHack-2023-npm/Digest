@@ -1,160 +1,158 @@
-import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField} from '@mui/material';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
+} from '@mui/material';
+import { DigestContext } from './ContextProvider';
 
 const DigestSequenceForm = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const {incompleteDigestInState, setIncompleteDigestInState} = useContext(
+    DigestContext
+  );
 
-    // This is where all new digests are created!!!
-    const [formData, setFormData] = useState({
-        digestName: '',
-        digestDescription: '',
-        contentFrequency: 'weekly',
-        customFrequency: '',
-        narrationStyle: 'scientific',
-        customNarrationStyle: '',
-        createdAt: new Date().toISOString().split('T')[0], // Format: YYYY-MM-DD
-        sources: [],
-        episodes: [],
-    });
+  console.log('[DigestSequenceForm] State to complete:', incompleteDigestInState);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-    // const [showCustomSources, setShowCustomSources] = useState(0);
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setIncompleteDigestInState({
+  //     ...incompleteDigestInState,
+  //     [name]: value
+  //   });
+  // };
 
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setIncompleteDigestInState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-    // const handleCheckboxChange = (source) => {
-    //     setFormData({
-    //         ...formData,
-    //         selectedSources: {
-    //             ...formData.selectedSources,
-    //             [source]: !formData.selectedSources[source],
-    //         },
-    //     });
-    // };
+  const postDigestSequence = async () => {
+    try {
+      const response = await fetch('/api/get-digest-with-sources', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(incompleteDigestInState)
+      });
 
-    // const addCustomSource = () => {
-    //     if (showCustomSources < 3) {
-    //         setShowCustomSources(showCustomSources + 1);
-    //     }
-    // };
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-    const postDigestSequence = async () => {
-        try {
-            // Send a POST request to the API to create a new digest sequence
-            const response = await fetch('/api/get-digest-with-sources', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+      const incompleteDigestWithSources = await response.json();
+      console.log('[DigestSequenceForm] Digest with sources:', incompleteDigestWithSources);
+      setIncompleteDigestInState(incompleteDigestWithSources);
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+      navigate('/finalize-digest-sources');
 
-            const responseData = await response.json();
-            navigate('/finalize-digest-sources', { state: { digestSequence: responseData } });
+    } catch (error) {
+      console.error('Error sending data:', error);
+    }
+  };
 
+  return (
+    <>
+      <form>
+        <FormControl fullWidth margin="normal">
+          <InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>
+          <TextField
+            id="digestName"
+            name="digestName"
+            value={incompleteDigestInState.digestName}
+            onChange={handleInputChange}
+          />
+        </FormControl>
 
-        } catch (error) {
-            console.error('Error sending data:', error);
-        }
-    };
+        <FormControl fullWidth margin="normal">
+          <InputLabel htmlFor="digestDescription">Describe your interest</InputLabel>
+          <TextField
+            id="digestDescription"
+            name="digestDescription"
+            label="Describe your interest"
+            placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
+            multiline
+            rows={4}
+            value={incompleteDigestInState.digestDescription}
+            onChange={handleInputChange}
+          />
+        </FormControl>
 
-    return (<>
-        <form>
-            <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="digestName"></InputLabel>
-                <TextField
-                    label="Name of Your Digest"
-                    id="digestName"
-                    name="digestName"
-                    value={formData.digestName}
-                    onChange={handleInputChange}
-                />
-            </FormControl>
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="frequency-label">Frequency</InputLabel>
+          <Select
+            labelId="frequency-label"
+            label="Frequency"
+            id="contentFrequency"
+            name="contentFrequency"
+            value={incompleteDigestInState.contentFrequency}
+            onChange={handleInputChange}
+          >
+            <MenuItem value="weekly">Weekly</MenuItem>
+            <MenuItem value="daily">Daily</MenuItem>
+            <MenuItem value="biweekly">Biweekly</MenuItem>
+            <MenuItem value="other">Other</MenuItem>
+          </Select>
+          {incompleteDigestInState.contentFrequency === 'other' && (
+            <TextField
+              sx={{ marginY: 1 }}
+              id="customFrequency"
+              name="customFrequency"
+              placeholder="Specify frequency"
+              value={incompleteDigestInState.customFrequency}
+              onChange={handleInputChange}
+            />
+          )}
+        </FormControl>
 
-            <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="digestDescription"></InputLabel>
-                <TextField
-                    id="digestDescription"
-                    name="digestDescription"
-                    label="Describe your interest"
-                    placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
-                    multiline
-                    rows={4}
-                    value={formData.digestDescription}
-                    onChange={handleInputChange}
-                />
-            </FormControl>
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="narration-label">Narration</InputLabel>
+          <Select
+            labelId="narration-label"
+            label="Narration"
+            id="narrationStyle"
+            name="narrationStyle"
+            value={incompleteDigestInState.narrationStyle}
+            onChange={handleInputChange}
+          >
+            <MenuItem value="scientific">Scientific</MenuItem>
+            <MenuItem value="easyLanguage">Easy Language</MenuItem>
+            <MenuItem value="funMode">Fun Mode</MenuItem>
+            <MenuItem value="other">Other</MenuItem>
+          </Select>
+          {incompleteDigestInState.narrationStyle === 'other' && (
+            <TextField
+              sx={{ marginY: 1 }}
+              id="customNarrationStyle"
+              name="customNarrationStyle"
+              placeholder="Specify narration style"
+              value={incompleteDigestInState.customNarrationStyle}
+              onChange={handleInputChange}
+            />
+          )}
+        </FormControl>
+      </form>
 
-            <FormControl fullWidth margin="normal">
-                <InputLabel id="frequency-label">Frequency</InputLabel>
-                <Select
-                    labelId="frequency-label"
-                    label="Frequency"
-                    id="contentFrequency"
-                    name="contentFrequency"
-                    value={formData.contentFrequency}
-                    onChange={handleInputChange}
-                >
-                    <MenuItem value="weekly">Weekly</MenuItem>
-                    <MenuItem value="daily">Daily</MenuItem>
-                    <MenuItem value="biweekly">Biweekly</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-                </Select>
-                {formData.contentFrequency === 'other' && (
-                    <TextField sx={{marginY: 1}}
-                        id="customFrequency"
-                        name="customFrequency"
-                        placeholder="Specify frequency"
-                        value={formData.customFrequency}
-                        onChange={handleInputChange}
-                    />
-                )}
-            </FormControl>
-
-            <FormControl fullWidth margin="normal">
-                <InputLabel id="narration-label">Narration</InputLabel>
-                <Select
-                    labelId="narration-label"
-                    label="Narration"
-                    id="narrationStyle"
-                    name="narrationStyle"
-                    value={formData.narrationStyle}
-                    onChange={handleInputChange}
-                >
-                    <MenuItem value="scientific">Scientific</MenuItem>
-                    <MenuItem value="easyLanguage">Easy Language</MenuItem>
-                    <MenuItem value="funMode">Fun Mode</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-
-                </Select>
-                {(formData.narrationStyle === 'other') && (
-                    <TextField sx={{marginY: 1}}
-                        id="customNarrationStyle"
-                        name="customNarrationStyle"
-                        placeholder="Specify narration style"
-                        value={formData.customNarrationStyle}
-                        onChange={handleInputChange}
-                    />
-                )}
-            </FormControl>
-        </form>
-            <Box sx={{display: 'flex', justifyContent: 'center', marginY: 4}}>
-                <Button onClick={postDigestSequence} variant="outlined">Next</Button>
-            </Box>
-
-        </>
-    );
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginY: 4 }}>
+        <Button onClick={postDigestSequence} variant="outlined">
+          Next
+        </Button>
+      </Box>
+    </>
+  );
 };
 
 export default DigestSequenceForm;

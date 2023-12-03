@@ -7,22 +7,32 @@ export const DigestContext = createContext();
 export const ContextProvider = ({ children }) => {
   // Define the state for DigestSequence
   const [digestSequences, setDigestSequences] = useState([]);
-
-  // digestSequences is an array containing objects with the following structure:
-  // { ... TODO
+  const [incompleteDigestInState, setIncompleteDigestInState] = useState({
+    digestName: '',
+    digestDescription: '',
+    contentFrequency: '',
+    customFrequency: '',
+    narrationStyle: '',
+    customNarrationStyle: '',
+    createdAt: new Date().toISOString().split('T')[0], // Format: YYYY-MM-DD
+    sources: [],
+    episodes: [],
+  });
 
   useEffect(() => {
-    console.log("Fetching dummy digest sequences from the backend")
     // Fetch the dummy digest sequences from the backend
     fetch('/api/get-dummy-digest-sequences')
       .then(response => response.json())
-      .then(data => setDigestSequences(data))
+      .then(data => {
+        setDigestSequences(data);
+        console.log("Fetched dummy digest sequences:", data);
+      })
       .catch(error => console.error(error));
   }, []);
 
   // Provide the state value and setter function to the child components
   return (
-    <DigestContext.Provider value={{ digestSequences, setDigestSequences }}>
+    <DigestContext.Provider value={{ digestSequences, setDigestSequences, incompleteDigestInState, setIncompleteDigestInState }}>
       {children}
     </DigestContext.Provider>
   );
