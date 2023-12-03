@@ -73,7 +73,11 @@ const DigestSourcesForm = () => {
       const completeDigest = await response.json();
       console.log('[DigestSourcesForm] Complete digest:', completeDigest);
       // updating context
+
       setDigestSequences([completeDigest, ...digestSequences]);
+      // By removing the name, we reset the incomplete digest
+      completeDigest.digestName = '';
+      setIncompleteDigestInState(completeDigest);
     } catch (error) {
       console.error('Error sending data:', error);
     }

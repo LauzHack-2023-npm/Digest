@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className='flex bg-bgColor-dark text-textColor'>
+    <footer className='flex bg-primary text-textColor'>
       <div className='flex w-full max-w-4xl m-auto p-2 justify-between'>
         <div className="left">© {currentYear}</div>
         <div className="center">Made with 🧀 in Lausanne.</div>

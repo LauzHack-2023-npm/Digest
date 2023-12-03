@@ -30,7 +30,6 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
 
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -47,7 +46,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" className="bg-primary.DEFAULT">
       <Container maxWidth="xl">
         <Toolbar disableGutters className='max-w-2xl m-auto'>
           <img 
@@ -68,6 +67,7 @@ function ResponsiveAppBar() {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            className="text-white"
           >
             DIGEST
           </Typography>
@@ -104,7 +104,7 @@ function ResponsiveAppBar() {
               {Object.keys(pagesDict).map((pageName, idx) => (
                 <Link key={pageName} to={pagesDict[pageName]}>
                   <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{pageName}</Typography>
+                    <Typography textAlign="center" className="text-primary.DEFAULT">{pageName}</Typography>
                   </MenuItem>
                 </Link>
               ))}
@@ -113,13 +113,13 @@ function ResponsiveAppBar() {
           <img 
             src={process.env.PUBLIC_URL + '/digest-logo-1_380x519.png'}
             className='h-10 mr-2 flex md:hidden'  
-            onClick={() => navigate('/')}   // Go to home page
+            onClick={() => navigate('/')}
           />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            onClick={() => navigate('/')}   // Go to home page
+            onClick={() => navigate('/')}
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -130,6 +130,7 @@ function ResponsiveAppBar() {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            className="text-white"
           >
             DIGEST
           </Typography>
@@ -139,6 +140,7 @@ function ResponsiveAppBar() {
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
+                  className="text-white"
                 >
                   {pageName}
                 </Button>
@@ -149,8 +151,6 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* TODO add avatar img PHilipp  */}
-                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
                 <Avatar alt="Pemy Sharp" src={process.env.PUBLIC_URL + '/avatar.jpg'} />
               </IconButton>
             </Tooltip>
@@ -173,7 +173,7 @@ function ResponsiveAppBar() {
               {Object.keys(settingsDict).map((setting, idx) => (
                 <Link key={setting} to={settingsDict[setting]}>
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                    <Typography textAlign="center" className="text-primary.DEFAULT">{setting}</Typography>
                   </MenuItem>
                 </Link>
               ))}

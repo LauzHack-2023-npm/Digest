@@ -60,8 +60,8 @@ const EpisodeCard = ({ item, className }) => {
 
 	return (
 		<Card
-			className={`${className}`}
-      sx={{ height: 320 }}
+			className={`relative ${className}`}
+      sx={{ height: 350 }}
 			onClick={() =>
 				navigate("/digest/0", {
 					state: {
@@ -96,20 +96,24 @@ const EpisodeCard = ({ item, className }) => {
           />
         )
       }
-			<CardContent>
-				<p className="text-lg">{title}</p>
-        <p className="text-sm">{description}</p>
-        <p className="text-xs">{`Created ${calculateDaysAgo(episodePublishedAt)} days ago`}</p>					
-				<div className="flex w-full items-center justify-between text-xs">
-          <div>
-            {formattedDuration}
+			<CardContent className="absolute top-32 flex flex-col h-48 justify-between">
+        <div className="flex flex-col">
+          <p className="text-md">{title}</p>
+          <p className="text-sm">{description}</p>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-xs">{`Created ${calculateDaysAgo(episodePublishedAt)} days ago`}</p>					
+          <div className="flex w-full mt-1 items-center justify-between text-xs">
+            <div>
+              {formattedDuration}
+            </div>
+            <div>
+              {hasBeenListenedTo ? null : (
+                <Chip label="New" color="primary" size="small" variant="filled" />
+              )}
+            </div>
           </div>
-          <div>
-            {hasBeenListenedTo ? null : (
-              <Chip label="New" color="primary" size="small" variant="filled" />
-            )}
-          </div>
-				</div>
+        </div>
 			</CardContent>
 		</Card>
 	);

@@ -11,15 +11,15 @@ module.exports = {
       colors: {
         // Main call-to-action color (determines the overall look and feel)
         primary: {  
-          DEFAULT: '#DD6031',         
-          dark: darken(0.1, '#DD6031'), 
-          light: lighten(0.1, '#DD6031'),
+          DEFAULT: '#058ED9',         
+          dark: darken(0.1, '#058ED9'), 
+          light: lighten(0.1, '#058ED9'),
         },
         // Optional secondary call-to-action color (accent color)
         secondary: {  
-          DEFAULT: '#124E78',         
-          dark: darken(0.1, '#124E78'), 
-          light: lighten(0.1, '#124E78'),
+          DEFAULT: '#DE6449',         
+          dark: darken(0.1, '#DE6449'), 
+          light: lighten(0.1, '#DE6449'),
         },
         
         // Optional tertiary call-to-action color
@@ -30,26 +30,26 @@ module.exports = {
         }, 
         // Background color
         bgColor: {  
-          DEFAULT: '#EAEAEA',   // platinum   
-          dark: darken(0.1, '#EAEAEA'), 
-          light: lighten(0.1, '#EAEAEA'),
+          DEFAULT: '#F4EBD9',  
+          dark: darken(0.1, '#F4EBD9'), 
+          light: lighten(0.1, '#F4EBD9'),
         },
         // Text color
         textColor: {  
-          DEFAULT: '#000000',         
-          dark: darken(0.1, '#000000'), 
-          light: lighten(0.1, '#000000'),
+          DEFAULT: '#121113',         
+          dark: darken(0.1, '#121113'), 
+          light: lighten(0.1, '#121113'),
         },
         // Border color
         borderColor: {  
-          DEFAULT: '#56666B',         
-          dark: darken(0.1, '#56666B'), 
-          light: lighten(0.1, '#56666B'),
+          DEFAULT: '#121113',         
+          dark: darken(0.1, '#121113'), 
+          light: lighten(0.1, '#121113'),
         },
         // Feedback colors
-        successColor: '#8EA604',   // green
-        errorColor: '#BF211E',     // red
-        warningColor: '#F5BB00',   // yellow
+        successColor: '#679436',   // green
+        errorColor: '#E3170A',     // red
+        warningColor: '#F08700',   // yellow
       },
     },
   },
