@@ -5,6 +5,7 @@ import {Box, Button, FormControl, InputLabel, MenuItem, Select, TextField} from 
 const DigestSequenceForm = () => {
     const navigate = useNavigate();
 
+    // This is where all new digests are created!!!
     const [formData, setFormData] = useState({
         digestName: '',
         digestDescription: '',
@@ -12,9 +13,13 @@ const DigestSequenceForm = () => {
         customFrequency: '',
         narrationStyle: 'scientific',
         customNarrationStyle: '',
+        createdAt: new Date().toISOString().split('T')[0], // Format: YYYY-MM-DD
+        sources: [],
+        episodes: [],
     });
 
-    const [showCustomSources, setShowCustomSources] = useState(0);
+
+    // const [showCustomSources, setShowCustomSources] = useState(0);
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -24,25 +29,26 @@ const DigestSequenceForm = () => {
         });
     };
 
-    const handleCheckboxChange = (source) => {
-        setFormData({
-            ...formData,
-            selectedSources: {
-                ...formData.selectedSources,
-                [source]: !formData.selectedSources[source],
-            },
-        });
-    };
+    // const handleCheckboxChange = (source) => {
+    //     setFormData({
+    //         ...formData,
+    //         selectedSources: {
+    //             ...formData.selectedSources,
+    //             [source]: !formData.selectedSources[source],
+    //         },
+    //     });
+    // };
 
-    const addCustomSource = () => {
-        if (showCustomSources < 3) {
-            setShowCustomSources(showCustomSources + 1);
-        }
-    };
+    // const addCustomSource = () => {
+    //     if (showCustomSources < 3) {
+    //         setShowCustomSources(showCustomSources + 1);
+    //     }
+    // };
 
     const postDigestSequence = async () => {
         try {
-            const response = await fetch('/api/digest-sequence', {
+            // Send a POST request to the API to create a new digest sequence
+            const response = await fetch('/api/get-digest-with-sources', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +61,7 @@ const DigestSequenceForm = () => {
             }
 
             const responseData = await response.json();
-            navigate('/set-resources',{ state: { digestSequence: responseData } });
+            navigate('/finalize-digest-sources', { state: { digestSequence: responseData } });
 
 
         } catch (error) {

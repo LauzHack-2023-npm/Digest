@@ -23,7 +23,7 @@ function App() {
               <Route path="/" Component={HomePage}/>
               <Route path="/page2" Component={Page2}/>
               <Route path="/add-digest" Component={AddDigestPage}/>
-              <Route path="/set-resources" Component={ResourcesForm}/>
+              <Route path="/finalize-digest-sources" Component={ResourcesForm}/>
             </Routes>
           </div>
           <Footer/>
