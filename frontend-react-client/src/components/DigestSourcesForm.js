@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
   Checkbox,
   FormControl,
-  MenuItem,
-  TextField,
+  MenuItem
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DigestContext } from './ContextProvider';
 
 const DigestSourcesForm = () => {
