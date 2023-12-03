@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Image from "material-ui-image";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const pagesDict = {
   "Home": '/',
@@ -29,6 +29,8 @@ const settingsDict = {
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -51,8 +53,7 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters className='max-w-2xl m-auto'>
           <img 
             src={process.env.PUBLIC_URL + '/digest-logo-1_380x519.png'}
-            // sx={{ display: { xs: 'none', md: 'flex' }, mr: 1}}
-            className='h-10 mr-1 hidden lg:flex'  
+            className='h-10 mr-1 hidden md:flex'  
           />
           <Typography
             variant="h6"
@@ -110,16 +111,16 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <img 
             src={process.env.PUBLIC_URL + '/digest-logo-1_380x519.png'}
-            className='h-10 mr-2 flex lg:hidden'  
+            className='h-10 mr-2'  
+            onClick={() => navigate('/')}   // Go to home page
           />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate('/')}   // Go to home page
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
