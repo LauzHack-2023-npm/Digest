@@ -5,9 +5,11 @@ DUMMY_DIGEST_SEQUENCE = [
         "Digest 1",
         "Digest 1 description",
         "daily",
+        "",
         "formal",
+        "customNarrationStyle",
         "2021-01-01",
-        "https://www.google.com",
-        "sources",
+        [], 
+        [],
     )
 ]

@@ -33,28 +33,31 @@ def generate_digest_podcast():
 @app.route('/api/get-dummy-digest-sequences')
 def get_dummy_digest_sequences():
     return jsonify(DUMMY_DIGEST_SEQUENCE)
-g
-@app.route('/api/digest-sequence', methods = ['POST'])
+
+
+@app.route('/api/get-digest-with-sources', methods = ['POST'])
 def post_digest_sequence():
     digestName = request.args.get("digestName")
     digestDescription = request.args.get("digestDescription")
-    contentFrequency = request.args.get("customFrequency") if request.args.get("customFrequency") is not None and request.args.get("customFrequency") != "" else request.args.get("contentFrequency")
-    narrationStyle = request.args.get("customNarrationStyle") if request.args.get("customNarrationStyle") is not None and request.args.get("customNarrationStyle") != "" else request.args.get("narrationStyle")
 
     # TODO: we need openAI to recommend the sources here!
-
-
-    return {
-    'digestName': digestName,
-    'digestDescription': digestDescription,
-    'contentFrequency': contentFrequency,
-    'narrationStyle': narrationStyle,
-#    TODO: these are hardcoded, recommend us other sources
-    'sources': [
+    sources = [
         {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
         {'name': 'arxive', 'url': 'https://arxiv.org/'}
     ]
-    }
+
+    return jsonify(create_digest_dict(
+        digestName,
+        digestDescription,
+        request.args.get("contentFrequency"),
+        request.args.get("customFrequency"),
+        request.args.get("contentNarrationStyle"),
+        request.args.get("customNarrationStyle"),
+        request.args.get("createdAt"),
+        sources,
+        request.args.get("episodes"),  
+    ))
+
 
 @app.route('/api/sources', methods = ['POST'])
 def post_sources():

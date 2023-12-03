@@ -66,7 +66,9 @@ def create_digest_dict(
     digestName: str, 
     digestDescription: str, 
     contentFrequency: str,      # One of ['daily', 'weekly', 'monthly']
+    customFrequency: str,       # dummy; we keep this always as empty: ''
     narrationStyle: str,        # One of ['', '']
+    customNarrationStyle: str,  # dummy; we keep this always as empty: ''
     createdAt: str,             # Format: YYYY-MM-DD 
     sources: List[str],
     episodes: List[Dict[str, str]]
@@ -76,7 +78,9 @@ def create_digest_dict(
         'digestName': digestName,
         'digestDescription': digestDescription,
         'contentFrequency': contentFrequency,
+        'customFrequency': customFrequency,
         'narrationStyle': narrationStyle,
+        'customNarrationStyle': customNarrationStyle,
         'createdAt': createdAt,
         'sources': sources,
         'episodes': episodes,
@@ -90,7 +94,8 @@ def create_episode_dict(
     episodeImageUrl: str,       # URL to the image file in backend
     episodeDuration: str,       # Format: HH:MM:SS
     episodePublishedAt: str,    # Format: YYYY-MM-DD
-    episodeSources: List[str]
+    episodeSources: List[str],
+    hasBeenListenedTo: bool,
 ):
     # Info: Add new fields at the end!
     return {
@@ -100,7 +105,8 @@ def create_episode_dict(
         'episodeImageUrl': episodeImageUrl,
         'episodeDuration': episodeDuration,
         'episodePublishedAt': episodePublishedAt,
-        'episodeSources': episodeSources
+        'episodeSources': episodeSources,
+        'hasBeenListenedTo': hasBeenListenedTo,
     }
     
     
