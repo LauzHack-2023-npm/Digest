@@ -71,6 +71,7 @@ def create_digest_dict(
     sources: List[str],
     episodes: List[Dict[str, str]]
 ):
+    # Info: Add new fields at the end!
     return {
         'digestName': digestName,
         'digestDescription': digestDescription,
@@ -91,6 +92,7 @@ def create_episode_dict(
     episodePublishedAt: str,    # Format: YYYY-MM-DD
     episodeSources: List[str]
 ):
+    # Info: Add new fields at the end!
     return {
         'episodeName': episodeName,
         'episodeDescription': episodeSummary,
