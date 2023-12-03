@@ -2,6 +2,9 @@ import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Chip } from '@mui/material';
 
 function formatDuration(duration) {
+  if (duration === null) {
+    return 'NaN';
+  }
   const [hours, minutes, seconds] = duration.split(':');
   let formattedString = '';
 

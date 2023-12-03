@@ -150,7 +150,7 @@ const DigestSequenceForm = () => {
       </form>
 
       <Box sx={{ display: 'flex', justifyContent: 'right', margin: 4, }}>
-        <Button variant="contained" endIcon={<ArrowForwardIosIcon/>}>
+        <Button variant="contained" endIcon={<ArrowForwardIosIcon/>} onClick={postDigestSequence}>
           Send
         </Button>
       </Box>

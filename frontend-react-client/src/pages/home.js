@@ -6,19 +6,28 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Banner from '../components/Banner';
 
 const HomePage = () => {
-  const { digestSequences, setDigestSequences } = useContext(DigestContext);
+  const { digestSequences, incompleteDigestInState } = useContext(DigestContext);
+  const [newDigestEpisodes, setNewDigestEpisodes] = useState([]);
+  const [listenedEpisodesByDigest, setListenedEpisodesByDigest] = useState([]);
 
-  // Filter the episodes that have not been listened to
-  // This is a list of episodes.
-  const newDigestEpisodes = digestSequences.flatMap(sequence => {
-    return sequence.episodes.filter(episode => !episode.hasBeenListenedTo);
-  });
+  useEffect(() => {
+    // Filter the episodes that have not been listened to
+    // This is a list of episodes.
+    let notListenedDigestEpisodes = digestSequences.flatMap(sequence => {
+      return sequence.episodes.filter(episode => !episode.hasBeenListenedTo);
+    });
+    // If there is an incomplete state, it is probably being created right now.
+    if (incompleteDigestInState.digestName !== ''){
+      notListenedDigestEpisodes = [incompleteDigestInState, ...notListenedDigestEpisodes];
+    }
+    setNewDigestEpisodes(notListenedDigestEpisodes);
 
-  // Filter the episodes that have been listened to
-  // This is a list of digests with corresponding episodes.
-  const listenedEpisodesByDigest = digestSequences.filter(sequence => {
-    return sequence.episodes.some(episode => episode.hasBeenListenedTo);
-  });
+    // Filter the episodes that have been listened to
+    // This is a list of digests with corresponding episodes.
+    setListenedEpisodesByDigest(digestSequences.filter(sequence => {
+      return sequence.episodes.some(episode => episode.hasBeenListenedTo);
+    }));
+  }, [digestSequences, incompleteDigestInState]);
 
   return (
     <div className='flex flex-col items-center'>
@@ -43,6 +52,7 @@ const HomePage = () => {
         ))}
       </div>
       {/* END */}
+
     </div>
   );
 };
