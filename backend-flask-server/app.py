@@ -1,11 +1,13 @@
 import json
 import os
-import openai
+from openai import OpenAI
 from flask import Flask, jsonify, request
 from utils import generate_digest_data, getSourceName
 from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
 import datetime
 from text_to_image import text_to_img
+from text_to_speech import text_to_speech
+from mutagen.mp3 import MP3
 
 
 app = Flask(__name__)
@@ -71,36 +73,47 @@ def generate_digest_content():
 
         digestName = data.get("digestName")
         digestDescription = data.get("digestDescription")
-        narrationStyle = data.get("narrationStyle")
+        narrationStyle = data.get("narrationStyle", "scientific")
 
         results = generate_digest_data(digestName, digestDescription)
         results = results.json
 
+        client = OpenAI()
+        # client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         conversation_prompt = [
-            {"role": "system", "content": f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself."},
+            # {"role": "user", "content": f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself."},
+            {"role": "user", "content": f"You: Use this information as a knowledge base: '{results}'. Create a script for a podcast, as scientific overview of the topics, based on the top 3 articles you find the most interesting. It should be done in a {narrationStyle} style. Your answer should be the text of the podcast itself."},
         ]
-        client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo-instruct",#"gpt-3.5-turbo-16k",
-            temperature=0.7,
-            max_tokens=2000,
+            model="gpt-3.5-turbo-1106",
             messages=conversation_prompt
         )
-        client.close()
-
-        result_json = response.choices[0].message.content
-        result_dict = json.loads(result_json)
         
-        episode_name = "TODO"
-        episode_summary = "TODO"
+        text_response = response.choices[0].message.content
+        
+        title_prompt = [{"role": "user","content": f"You: Provide me with a title for this podcast script: {text_response}. Your answer should be the title of the podcast script."}]
+        summary_prompt = [{"role": "user","content": f"You: Provide me with a summary for this podcast script: {text_response}. Your answer should be the summary of the podcast script."}]
 
-        # TODO to text-2-speech here. Input: episode_summary. Output: episode_mp3_path. Save the file under some local folder
+        title_response = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=title_prompt,
+        )
+        
+        summary_response = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=summary_prompt,
+        )
+        
+        title = title_response.choices[0].message.content
+        summary = summary_response.choices[0].message.content
+        
+        script = text_response
+        episode_name = title
+        episode_summary = summary
 
-        # TODO to text-2-img here. Input: title or episode_summary. Output: img path. Save the file under the frontend's public folder --> maybe create a new folder there and put it in the gitignore
-
-        episode_mp3_path = "TODO"
+        episode_mp3_path = text_to_speech(script)
         episode_img_url = text_to_img("it is a cover for a podcast episode with about this topic: " + episode_summary)
-        episode_duration = "TODO"
+        episode_duration = MP3(episode_mp3_path).info.length  # duration in seconds
 
         new_episode = create_episode_dict(
             episode_name,

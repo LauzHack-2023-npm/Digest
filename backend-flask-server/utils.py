@@ -1,39 +1,49 @@
 import os
+from openai import OpenAI
 from typing import Dict, List
-import openai
 from flask import jsonify
 
 from retrievers.retriever import ArxivRetriever, WikiRetriever
 
 # returns the most approptiate sources based on user input
 def getSourceName(digestName, digestDescription):
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
-    prompt = "You: You are given a 'digestName' which is '{}' and a 'digestDescription', which is '{}'. I have two types of sources on my disposal, wikipedia or arxiv. Depending of what I gave me, answer me if I need to search whether in wikipedia or in arxiv. Your answer should just be 'wikipedia' or 'arxiv'\nAI:".format(digestName, digestDescription)
-    response = openai.Completion.create(
-        model="text-davinci-003",  # Specify the model
-        prompt=prompt,
-        temperature=0.7,  # Controls the randomness of the output
-        max_tokens=150  # Limit the length of the response
-    )
+    client = OpenAI()
+    conversation_prompt = [
+        {
+            "role": "user", 
+            "content": f"You: You are given a 'digestName' which is '{digestName}' and a 'digestDescription', which is '{digestDescription}'. I have two types of sources on my disposal, wikipedia or arxiv. Depending of what I gave me, answer me if I need to search whether in wikipedia or in arxiv. Your answer should just be 'wikipedia' or 'arxiv'\nAI:"
+        },
+    ]
+    response = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",#"gpt-3.5-turbo-16k",
+            # temperature=0.7,
+            # max_tokens=2000,
+            messages=conversation_prompt
+        )
     
-    ai_reply = response['choices'][0]['text'].strip().lower()
+    client.close()
     
-    print(ai_reply)
+    ai_reply = response.choices[0].message.content.strip().lower()
+    
     return ai_reply
 
 def generateKeyword(digestName, digestDescription):
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
-    prompt = "You: You are given a 'digestName' which is '{}' and a 'digestDescription', which is '{}'. I need you to generate one keyword for me. Your answer should be this keyword\nAI:".format(digestName, digestDescription)
-    response = openai.Completion.create(
-        model="text-davinci-003",  # Specify the model
-        prompt=prompt,
-        temperature=0.7,  # Controls the randomness of the output
-        max_tokens=150  # Limit the length of the response
-    )
+    client = OpenAI()
+    conversation_prompt = [
+        {
+            "role": "user",
+            "content": f"You: You are given a 'digestName' which is '{digestName}' and a 'digestDescription', which is '{digestDescription}'. I need you to generate one keyword for me. Your answer should be this keyword\nAI:"
+        }
+    ]
+    response = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",#"gpt-3.5-turbo-16k",
+            # temperature=0.7,
+            # max_tokens=2000,
+            messages=conversation_prompt
+        )
     
-    ai_reply = response['choices'][0]['text'].strip().lower()
+    ai_reply = response.choices[0].message.content.strip().lower()
 
-    print(ai_reply)
     return ai_reply
 
 def generate_digest_data(digestName, digestDescription):
