@@ -15,7 +15,7 @@ import { DigestContext } from './ContextProvider';
 const DigestSourcesForm = () => {
   const { digestSequences, setDigestSequences, incompleteDigestInState, setIncompleteDigestInState } = useContext(DigestContext);
   const navigate = useNavigate();
-  console.log('State to select sources for:', incompleteDigestInState)
+  console.log('[DigestSourcesForm] State to select sources for:', incompleteDigestInState)
   // FIXME state may be empty when reloading this page -> fail
   // Doing the following is too fast....
   // useEffect(() => {
@@ -131,7 +131,7 @@ const DigestSourcesForm = () => {
       );
     } else {
       // If the source is not present, add it
-      updatedSources = [...selectedSources.sources, source];
+      updatedSources = [...selectedSources, source];
     }
     setSelectedSources(updatedSources);
   };
