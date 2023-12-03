@@ -1,8 +1,8 @@
 import json
 import os
 import openai
-from flask import Flask, jsonify, request, g
-from utils import generate_digest_data, generateKeyword, getSourceName
+from flask import Flask, jsonify, request
+from utils import generate_digest_data, getSourceName
 from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
 import datetime
 
@@ -15,13 +15,14 @@ def generate_digest_podcast():
 
         digestName = data.get("digestName")
         digestDescription = data.get("digestDescription")
+        narrationStyle = data.get("narrationStyle")
 
         results = generate_digest_data(digestName, digestDescription)
         results = results.json
 
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-        prompt = f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. Just print the text of the podcast itself.\nAI:"
+        prompt = f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself.\nAI:"
 
         response = openai.Completion.create(
             model="gpt-3.5-turbo-instruct",
