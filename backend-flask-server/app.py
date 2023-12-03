@@ -90,32 +90,26 @@ def generate_digest_content():
         )
         
         text_response = response.choices[0].message.content
-        print("text_response:", text_response)
         
         title_prompt = [{"role": "user","content": f"You: Provide me with a title for this podcast script: {text_response}. Your answer should be the title of the podcast script."}]
         summary_prompt = [{"role": "user","content": f"You: Provide me with a summary for this podcast script: {text_response}. Your answer should be the summary of the podcast script."}]
 
-        title_response = client.completions.create(
+        title_response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             messages=title_prompt,
         )
         
-        summary_response = client.completions.create(
+        summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             messages=summary_prompt,
         )
         
-        print(title_response)
-        print(summary_response)
+        title = title_response.choices[0].message.content
+        summary = summary_response.choices[0].message.content
         
-        # print(response)
-        # result_json = response.choices[0].message.content
-        # result_dict = json.loads(result_json)
-        
-        episode_name = "TODO"
-        episode_summary = "TODO"
-
-        script = "TODO"
+        script = text_response
+        episode_name = title
+        episode_summary = summary
 
         episode_mp3_path = text_to_speech(script)
         episode_img_url = text_to_img("it is a cover for a podcast episode with about this topic: " + episode_summary)
