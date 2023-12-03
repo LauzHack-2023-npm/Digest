@@ -10,6 +10,8 @@ import {
   TextField
 } from '@mui/material';
 import { DigestContext } from './ContextProvider';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 
 const DigestSequenceForm = () => {
   const navigate = useNavigate();
@@ -65,13 +67,15 @@ const DigestSequenceForm = () => {
   };
 
   return (
-    <>
+    <div className='mx-4'>
+      <h1 className='text-left font-bold text-xl mt-8'>Create a Digest</h1>
       <form>
         <FormControl fullWidth margin="normal">
           <TextField
             id="digestName"
             name="digestName"
-            label="Name of Your Digest"
+            label="Give it a name!"
+            placeholder="For example, 'My Daily Digest'"
             value={incompleteDigestInState.digestName}
             onChange={handleInputChange}
           />
@@ -81,8 +85,8 @@ const DigestSequenceForm = () => {
           <TextField
             id="digestDescription"
             name="digestDescription"
-            label="Describe your interest"
-            placeholder="e.g., Female electronic worker's in the time of the French Revolution life stories"
+            label="What are you interested in?"
+            placeholder="For instance, 'Female electronic worker's in the time of the French Revolution life stories.'"
             multiline
             rows={4}
             value={incompleteDigestInState.digestDescription}
@@ -91,17 +95,17 @@ const DigestSequenceForm = () => {
         </FormControl>
 
         <FormControl fullWidth margin="normal">
-          <InputLabel id="frequency-label">Frequency</InputLabel>
+          <InputLabel id="frequency-label">How often do you want to receive it?</InputLabel>
           <Select
             labelId="frequency-label"
-            label="Frequency"
+            label="How frequently would you like to receive it?"
             id="contentFrequency"
             name="contentFrequency"
             value={incompleteDigestInState.contentFrequency}
             onChange={handleInputChange}
           >
-            <MenuItem value="weekly">Weekly</MenuItem>
             <MenuItem value="daily">Daily</MenuItem>
+            <MenuItem value="weekly">Weekly</MenuItem>
             <MenuItem value="biweekly">Biweekly</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
@@ -118,17 +122,17 @@ const DigestSequenceForm = () => {
         </FormControl>
 
         <FormControl fullWidth margin="normal">
-          <InputLabel id="narration-label">Narration</InputLabel>
+          <InputLabel id="narration-label">Narration Style</InputLabel>
           <Select
             labelId="narration-label"
-            label="Narration"
+            label="Narration Style"
             id="narrationStyle"
             name="narrationStyle"
             value={incompleteDigestInState.narrationStyle}
             onChange={handleInputChange}
           >
-            <MenuItem value="scientific">Scientific</MenuItem>
             <MenuItem value="easyLanguage">Easy Language</MenuItem>
+            <MenuItem value="scientific">Scientific</MenuItem>
             <MenuItem value="funMode">Fun Mode</MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>
@@ -145,12 +149,12 @@ const DigestSequenceForm = () => {
         </FormControl>
       </form>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginY: 4 }}>
-        <Button onClick={postDigestSequence} variant="outlined">
-          Next
+      <Box sx={{ display: 'flex', justifyContent: 'right', margin: 4, }}>
+        <Button variant="contained" endIcon={<ArrowForwardIosIcon/>}>
+          Send
         </Button>
       </Box>
-    </>
+    </div>
   );
 };
 

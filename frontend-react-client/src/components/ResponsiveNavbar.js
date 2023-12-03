@@ -113,7 +113,7 @@ function ResponsiveAppBar() {
           </Box>
           <img 
             src={process.env.PUBLIC_URL + '/digest-logo-1_380x519.png'}
-            className='h-10 mr-2'  
+            className='h-10 mr-2 flex md:hidden'  
             onClick={() => navigate('/')}   // Go to home page
           />
           <Typography
