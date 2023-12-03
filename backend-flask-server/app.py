@@ -32,34 +32,52 @@ def generate_digest_podcast():
 
 @app.route('/api/get-dummy-digest-sequences')
 def get_dummy_digest_sequences():
-    return jsonify(DUMMY_DIGEST_SEQUENCE)
+    """Returns some dummy content to populate the user's choices with."""
+    try:
+        return jsonify(DUMMY_DIGEST_SEQUENCE), 200
+    except Exception as e:
+        print(f"[get_dummy_digest_sequences] Exception: {e}")
+        return {"error": str(e)}, 500
 
 
-@app.route('/api/get-digest-with-sources', methods = ['POST'])
+@app.route('/api/get-digest-with-sources', methods=['POST'])
 def post_digest_sequence():
-    digestName = request.args.get("digestName")
-    digestDescription = request.args.get("digestDescription")
+    try:
+        data = request.get_json()
 
-    # TODO: we need openAI to recommend the sources here!
-    sources = [
-        {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
-        {'name': 'arxive', 'url': 'https://arxiv.org/'}
-    ]
+        # Extract data from the JSON payload
+        digestName = data.get("digestName")
+        digestDescription = data.get("digestDescription")
 
-    return jsonify(create_digest_dict(
-        digestName,
-        digestDescription,
-        request.args.get("contentFrequency"),
-        request.args.get("customFrequency"),
-        request.args.get("contentNarrationStyle"),
-        request.args.get("customNarrationStyle"),
-        request.args.get("createdAt"),
-        sources,
-        request.args.get("episodes"),  
-    ))
+        # TODO: Rest of your code to process the data
+
+        sources = [
+            {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
+            {'name': 'arxiv', 'url': 'https://arxiv.org/'}
+        ]
+
+        ret = create_digest_dict(
+            digestName,
+            digestDescription,
+            data.get("contentFrequency"),
+            data.get("customFrequency"),
+            data.get("contentNarrationStyle"),
+            data.get("customNarrationStyle"),
+            data.get("createdAt"),
+            sources,
+            data.get("episodes"),
+        )
+
+        print(ret)
+
+        return jsonify(ret), 200
+
+    except Exception as e:
+        print('Error processing request:', str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
-@app.route('/api/sources', methods = ['POST'])
+@app.route('/api/generate-digest-content', methods = ['POST'])
 def post_sources():
     data = request.get_json()
     digestName = data.get("digestName")
@@ -79,10 +97,10 @@ def post_sources():
     }
 
 
-@app.route('/api/get-source')
+@app.route('/api/get-available-sources')
 # get prompt of the user
 # returns possible sources
-def get_possible_sources():
+def get_available_sources():
     return jsonify([
         {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
         {'name': 'arxive', 'url': 'https://arxiv.org/'}
@@ -90,4 +108,4 @@ def get_possible_sources():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=4000)
