@@ -37,4 +37,28 @@ DUMMY_DIGEST_SEQUENCE = [
             ),
         ],
     ),
+    create_digest_dict(
+        "Digest 2",
+        "Digest 2 description",
+        "daily",
+        "",
+        "formal",
+        "customNarrationStyle",
+        "2021-01-01",
+        sources=[_["name"] for _ in all_sources],
+        episodes=[
+            create_episode_dict(
+                "Unraveling the Impact: High-Frequency Trading and Financial Markets",
+                "This podcast delves into the impact of high-frequency trading on financial markets. It discusses three recent scientific articles that explore the effects of high-frequency trading on market dynamics and volatility. The first article investigates how high-frequency trading exacerbates market volatility and generates flash crashes. The second article proposes using the permutation approach to study micro patterns in financial time series affected by high-frequency trading. The third article introduces a new analytical framework for high-frequency trading algorithms based on machine learning. These studies shed light on the complex dynamics of high-frequency trading and its implications for financial markets. Thank you for tuning in, and stay tuned for more episodes on cutting-edge research in finance and economics.",
+                "/Users/philippwulff/Digest/frontend-react-client/public/audio/e891dc10-91c6-11ee-aa52-ca226dd9b77c.mp3",
+                "public/img-RypN0JOWxV546AHOfqxniE97.png",
+                "143.568",
+                "2023-12-03",
+                ["arXiv", "Wikipedia"],  
+                True,
+            )
+        ]
+    )
 ]
+
+
