@@ -1,14 +1,14 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import AudioPlayer from "material-ui-audio-player";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const Digest = () => {
 	const { state } = useLocation();
 
 	useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+		window.scrollTo(0, 0);
+	}, []);
 
 	const digestData = {
 		digestName: state.digestName ?? "The Daily Digest",
@@ -37,6 +37,8 @@ const Digest = () => {
 		const differenceInTime = currentDate - new Date(createdDate);
 		return Math.floor(differenceInTime / (1000 * 3600 * 24));
 	};
+
+	console.log("digestData", digestData);
 
 	return (
 		<>
