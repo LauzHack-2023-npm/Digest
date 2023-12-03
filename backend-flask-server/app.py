@@ -4,30 +4,74 @@ import openai
 from flask import Flask, jsonify, request, g
 from utils import generate_digest_data, generateKeyword, getSourceName
 from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
+import datetime
 
 app = Flask(__name__)
 
-@app.route('/api/generate-digest-podcast', methods = ['POST'])
+@app.route('/api/generate-digest-podcast', methods=['POST'])
 def generate_digest_podcast():
-    digestName = request.args.get("digestName")
-    digestDescription = request.args.get("digestDescription")
+    try:
+        data = request.get_json()
 
-    results = generate_digest_data(digestName, digestDescription)
-    results = results.json
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
+        digestName = data.get("digestName")
+        digestDescription = data.get("digestDescription")
+
+        results = generate_digest_data(digestName, digestDescription)
+        results = results.json
+
+        openai.api_key = os.environ.get("OPENAI_API_KEY")
+
+        prompt = f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. Just print the text of the podcast itself.\nAI:"
+
+        response = openai.Completion.create(
+            model="gpt-3.5-turbo-instruct",
+            prompt=prompt,
+            temperature=0.7,
+            max_tokens=2000
+        )
+
+        response_text = response['choices'][0]['text'].strip()
+        
+        episode_name = "TODO"
+        episode_summary = "TODO"
+        
+        # TODO to text-2-speech here. Input: episode_summary. Output: episode_mp3_path. Save the file under some local folder
+        
+        # TODO to text-2-img here. Input: title or episode_summary. Output: img path. Save the file under the frontend's public folder --> maybe create a new folder there and put it in the gitignore
     
-    prompt = "You: \
-    You are given some data: '{}'. take the 3 article you find the most interesting and write a podcast script, based on the knowledge I gave you. Just print the text of the podcast itself.\
-    \nAI:".format(results)
-    
-    response = openai.Completion.create(
-        model="gpt-3.5-turbo-instruct",  # Specify the model
-        prompt=prompt,
-        temperature=0.7,  # Controls the randomness of the output
-        max_tokens=2000  # Limit the length of the response
-    )
-    response = response['choices'][0]['text'].strip()
-    return jsonify(response)
+        
+        episode_mp3_path = "TODO"
+        episode_img_url = "TODO"
+        episode_duration = "TODO"
+        
+        new_episode = create_episode_dict(
+            episode_name,
+            episode_summary,
+            episode_mp3_path,
+            episode_img_url,
+            episode_duration,
+            datetime.date.today().strftime("%Y-%m-%d"),   # Format is YYYY-MM-DD
+            data.get("sources"),
+            hasBeenListenedTo=False,
+        )
+        
+        ret = create_digest_dict(
+            digestName,
+            digestDescription,
+            data.get("contentFrequency"),
+            data.get("customFrequency"),
+            data.get("contentNarrationStyle"),
+            data.get("customNarrationStyle"),
+            data.get("createdAt"),
+            data.get("sources"),
+            [new_episode],
+        )
+        
+        return jsonify(ret), 200
+
+    except Exception as e:
+        print('Error processing request:', str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
     
 
 @app.route('/api/get-dummy-digest-sequences')
@@ -67,8 +111,6 @@ def post_digest_sequence():
             sources,
             data.get("episodes"),
         )
-
-        print(ret)
 
         return jsonify(ret), 200
 
