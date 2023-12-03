@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request
 from utils import generate_digest_data, getSourceName
 from dummy import DUMMY_DIGEST_SEQUENCE, create_digest_dict, create_episode_dict
 import datetime
+from text_to_image import text_to_img
 
 
 app = Flask(__name__)
@@ -86,22 +87,21 @@ def generate_digest_content():
             messages=conversation_prompt
         )
         client.close()
-        
+
         result_json = response.choices[0].message.content
         result_dict = json.loads(result_json)
         
         episode_name = "TODO"
         episode_summary = "TODO"
-        
+
         # TODO to text-2-speech here. Input: episode_summary. Output: episode_mp3_path. Save the file under some local folder
-        
+
         # TODO to text-2-img here. Input: title or episode_summary. Output: img path. Save the file under the frontend's public folder --> maybe create a new folder there and put it in the gitignore
-    
-        
+
         episode_mp3_path = "TODO"
-        episode_img_url = "TODO"
+        episode_img_url = text_to_img("it is a cover for a podcast episode with about this topic: " + episode_summary)
         episode_duration = "TODO"
-        
+
         new_episode = create_episode_dict(
             episode_name,
             episode_summary,
@@ -112,7 +112,7 @@ def generate_digest_content():
             data.get("sources"),
             hasBeenListenedTo=False,
         )
-        
+
         ret = create_digest_dict(
             digestName,
             digestDescription,
@@ -124,7 +124,7 @@ def generate_digest_content():
             data.get("sources"),
             [new_episode],
         )
-        
+
         return jsonify(ret), 200
 
     except Exception as e:
