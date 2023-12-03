@@ -1,6 +1,6 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
 import AudioPlayer from "material-ui-audio-player";
-import React from "react";
+import React, {useEffect} from "react";
 import { useLocation } from "react-router-dom";
 
 const Digest = () => {
