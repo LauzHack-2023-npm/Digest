@@ -68,17 +68,16 @@ const DigestSequenceForm = () => {
     <>
       <form>
         <FormControl fullWidth margin="normal">
-          <InputLabel htmlFor="digestName">Name of Your Digest</InputLabel>
           <TextField
             id="digestName"
             name="digestName"
+            label="Name of Your Digest"
             value={incompleteDigestInState.digestName}
             onChange={handleInputChange}
           />
         </FormControl>
 
         <FormControl fullWidth margin="normal">
-          <InputLabel htmlFor="digestDescription">Describe your interest</InputLabel>
           <TextField
             id="digestDescription"
             name="digestDescription"
