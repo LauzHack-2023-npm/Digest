@@ -65,9 +65,9 @@ def generate_digest_data(digestName, digestDescription):
 def create_digest_dict(
     digestName: str, 
     digestDescription: str, 
-    contentFrequency: str,      # One of ['daily', 'weekly', 'monthly']
+    contentFrequency: str,      # One of ['daily', 'weekly', 'monthly', 'biweekly']
     customFrequency: str,       # dummy; we keep this always as empty: ''
-    narrationStyle: str,        # One of ['', '']
+    narrationStyle: str,        # One of ['scientific', 'easyLanguage', 'funMode]
     customNarrationStyle: str,  # dummy; we keep this always as empty: ''
     createdAt: str,             # Format: YYYY-MM-DD 
     sources: List[str],
