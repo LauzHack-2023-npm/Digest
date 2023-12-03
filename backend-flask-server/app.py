@@ -93,13 +93,11 @@ def post_digest_sequence():
         digestName = data.get("digestName")
         digestDescription = data.get("digestDescription")
 
-        # TODO: Rest of your code to process the data
-
-        sources = [
-            {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
-            {'name': 'arxiv', 'url': 'https://arxiv.org/'}
-        ]
-
+        with open("sources.json", "r") as sources_file:
+            sources = json.load(sources_file)
+            sourceName = getSourceName(digestName, digestDescription)
+            sources = list(filter(lambda x: x["name"] == sourceName, sources))
+        
         ret = create_digest_dict(
             digestName,
             digestDescription,
@@ -108,7 +106,7 @@ def post_digest_sequence():
             data.get("contentNarrationStyle"),
             data.get("customNarrationStyle"),
             data.get("createdAt"),
-            sources,
+            [source["name"] for source in sources], # list of string of names
             data.get("episodes"),
         )
 

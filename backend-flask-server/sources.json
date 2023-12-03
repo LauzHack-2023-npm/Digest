@@ -1,10 +1,12 @@
 [
-    {
-        "name": "wikipedia",
-        "base_url": "http://en.wikipedia.org/?curid="
-    },
-    {
-        "name": "arxiv",
-        "base_url": "https://arxiv.org/abs/"
-    }
+	{
+		"name": "wikipedia",
+		"url": "https://en.wikipedia.org/",
+		"base_url": "http://en.wikipedia.org/?curid="
+	},
+	{
+		"name": "arxiv",
+		"url": "https://arxiv.org/",
+		"base_url": "https://arxiv.org/abs/"
+	}
 ]
