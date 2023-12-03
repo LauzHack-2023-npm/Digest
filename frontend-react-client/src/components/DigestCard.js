@@ -4,10 +4,12 @@ import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 const DigestCard = ({ item, className }) => {
 
   // Destructure the item object
-  const title = item.title;
-  const description = item.description;
+  const title = item.digestName;
+  const description = item.digestDescription;
   const imageUrl = item.imageUrl;
   const createdAt = item.createdAt;
+  const contentFrequency = item.contentFrequency;
+  const narrationStyle = item.narrationStyle;
 
   // Function to calculate how many days ago the episode was created
   const calculateDaysAgo = (createdDate) => {
