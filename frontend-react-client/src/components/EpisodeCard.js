@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function formatDuration(duration) {
-  if (duration === null) {
+  if ((duration === null) && (duration === undefined)) {
     return 'NaN';
   }
   const [hours, minutes, seconds] = duration.split(':');
