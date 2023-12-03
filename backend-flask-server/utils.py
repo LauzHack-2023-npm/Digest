@@ -1,4 +1,5 @@
 import os
+from typing import Dict, List
 import openai
 from flask import jsonify
 
@@ -59,3 +60,45 @@ def generate_digest_data(digestName, digestDescription):
             return jsonify({"error": result['error']})
     else:
         return jsonify({"error": "wrong source name"})
+
+
+def create_digest_dict(
+    digestName: str, 
+    digestDescription: str, 
+    contentFrequency: str,      # One of ['daily', 'weekly', 'monthly']
+    narrationStyle: str,        # One of ['', '']
+    createdAt: str,             # Format: YYYY-MM-DD 
+    sources: List[str],
+    episodes: List[Dict[str, str]]
+):
+    return {
+        'digestName': digestName,
+        'digestDescription': digestDescription,
+        'contentFrequency': contentFrequency,
+        'narrationStyle': narrationStyle,
+        'createdAt': createdAt,
+        'sources': sources,
+        'episodes': episodes,
+    }
+    
+    
+def create_episode_dict(
+    episodeName: str,
+    episodeSummary: str,
+    episodeMP3path: str,        # Path to the MP3 file in backend
+    episodeImageUrl: str,       # URL to the image file in backend
+    episodeDuration: str,       # Format: HH:MM:SS
+    episodePublishedAt: str,    # Format: YYYY-MM-DD
+    episodeSources: List[str]
+):
+    return {
+        'episodeName': episodeName,
+        'episodeDescription': episodeSummary,
+        'episodeMP3path': episodeMP3path,
+        'episodeImageUrl': episodeImageUrl,
+        'episodeDuration': episodeDuration,
+        'episodePublishedAt': episodePublishedAt,
+        'episodeSources': episodeSources
+    }
+    
+    

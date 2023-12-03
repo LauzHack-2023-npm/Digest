@@ -1,8 +1,8 @@
 import json
 import os
 import openai
-from flask import Flask, jsonify, request
-from utils import generate_digest_data, generateKeyword, getSourceName
+from flask import Flask, jsonify, request, g
+from utils import generate_digest_data, generateKeyword, getSourceName, DUMMY_DIGEST_SEQUENCE, create_digest_dict
 
 app = Flask(__name__)
 
@@ -31,14 +31,7 @@ def generate_digest_podcast():
 
 @app.route('/api/get-dummy-digest-sequences')
 def get_dummy_digest_sequences():
-    digest_sequences = [
-        {"hello": "world1"},
-        {"hello": "world2"},
-        {"hello": "world3"},
-        {"hello": "world4"},
-        {"hello": "world5"},
-    ]
-    return jsonify(digest_sequences)
+    return jsonify(DUMMY_DIGEST_SEQUENCE)
 g
 @app.route('/api/digest-sequence', methods = ['POST'])
 def post_digest_sequence():
@@ -80,7 +73,8 @@ def post_sources():
     'sources': sources,
     'customSources': customSources
     }
-    
+
+
 @app.route('/api/get-source')
 # get prompt of the user
 # returns possible sources
@@ -89,7 +83,7 @@ def get_possible_sources():
         {'name': 'wikipedia', 'url': 'https://en.wikipedia.org/'},
         {'name': 'arxive', 'url': 'https://arxiv.org/'}
     ])
-    
+
 
 if __name__ == '__main__':
     app.run(debug=True)
