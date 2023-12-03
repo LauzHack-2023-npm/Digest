@@ -1,15 +1,17 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 
-const DigestCard = ({ item, className }) => {
+
+const EpisodeCard = ({ item, className }) => {
 
   // Destructure the item object
-  const title = item.digestName;
-  const description = item.digestDescription;
-  const imageUrl = item.imageUrl;
-  const createdAt = item.createdAt;
-  const contentFrequency = item.contentFrequency;
-  const narrationStyle = item.narrationStyle;
+  const title = item.episodeName;
+  const description = item.episodeSummary;
+  const imageUrl = item.episodeImageUrl;
+  const episodeDuration = item.episodeDuration; // Format: HH:MM:SS
+  const episodePublishedAt = item.episodePublishedAt; // Format: YYYY-MM-DD
+  const hasBeenListenedTo = item.hasBeenListenedTo;
+  const episodeMP3path = item.episodeMP3path;
 
   // Function to calculate how many days ago the episode was created
   const calculateDaysAgo = (createdDate) => {
@@ -29,11 +31,11 @@ const DigestCard = ({ item, className }) => {
           {description}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {`${calculateDaysAgo(createdAt)} days ago`}
+          {`${calculateDaysAgo(episodePublishedAt)} days ago`}
         </Typography>
       </CardContent>
     </Card>
   );
 };
 
-export default DigestCard;
+export default EpisodeCard;

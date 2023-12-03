@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import DigestCard from './DigestCard';
+import EpisodeCard from './EpisodeCard';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Slider from "react-slick";
@@ -7,7 +7,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 
-const DigestsCarousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
+const Carousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
 
   const slider = React.createRef();
   var settings = {
@@ -32,7 +32,7 @@ const DigestsCarousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
           items.map((item, idx) => {
             return (
               //<div key={idx} className='flex items-center justify-center h-full'>
-              <DigestCard key={idx} className='' item={item} />
+              <EpisodeCard key={idx} className='' item={item} />
               //</div>
             );
           })
@@ -46,4 +46,4 @@ const DigestsCarousel = ({ items, cardHeight = '40', cardWidth = '40' }) => {
   );
 };
 
-export default DigestsCarousel;
+export default Carousel;
