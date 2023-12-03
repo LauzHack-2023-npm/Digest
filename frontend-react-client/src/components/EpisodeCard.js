@@ -18,7 +18,7 @@ function formatDuration(duration) {
   duration = Math.abs(duration);
 
   const minutes = Math.floor(duration / 60);
-  const seconds = duration % 60;
+  const seconds = Math.floor(duration % 60); // Use Math.floor to remove decimals
 
   let formattedString = '';
 
@@ -61,6 +61,7 @@ const EpisodeCard = ({ item, className }) => {
 	return (
 		<Card
 			className={`${className}`}
+      sx={{ height: 320 }}
 			onClick={() =>
 				navigate("/digest/0", {
 					state: {
@@ -82,36 +83,32 @@ const EpisodeCard = ({ item, className }) => {
 		>
 			{
         episodeDuration === undefined || episodeDuration === "" ? (
-          <div style={{ width: '100%', height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ height: "150px", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <CircularProgress />
           </div>
         ) : (
           <CardMedia
             component="img"
             alt="Episode Image"
-            height="140"
+            height="100px"
             image={imageUrl}
             style={{ height: "140px" }} // Set the height explicitly
           />
         )
       }
 			<CardContent>
-				<Typography variant="h5" component="div">
-					{title}
-				</Typography>
-				<Typography variant="body2" color="text.secondary">
-					{description}
-				</Typography>
-				<Typography variant="caption" color="text.secondary">
-					{`Created ${calculateDaysAgo(episodePublishedAt)} days ago`}
-				</Typography>
-				<div className="flex w-full items-center justify-between">
-					<Typography variant="caption" color="text.secondary">
-						{formattedDuration}
-					</Typography>
-					{hasBeenListenedTo ? null : (
-						<Chip label="New" color="primary" size="small" variant="filled" />
-					)}
+				<p className="text-lg">{title}</p>
+        <p className="text-sm">{description}</p>
+        <p className="text-xs">{`Created ${calculateDaysAgo(episodePublishedAt)} days ago`}</p>					
+				<div className="flex w-full items-center justify-between text-xs">
+          <div>
+            {formattedDuration}
+          </div>
+          <div>
+            {hasBeenListenedTo ? null : (
+              <Chip label="New" color="primary" size="small" variant="filled" />
+            )}
+          </div>
 				</div>
 			</CardContent>
 		</Card>

@@ -6,6 +6,10 @@ import { useLocation } from "react-router-dom";
 const Digest = () => {
 	const { state } = useLocation();
 
+	useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 	const digestData = {
 		digestName: state.digestName ?? "The Daily Digest",
 		digestDescription: state.digestDescription ?? "This podcast is about...",
