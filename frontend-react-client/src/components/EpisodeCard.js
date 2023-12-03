@@ -41,10 +41,8 @@ function formatDuration(duration) {
 const EpisodeCard = ({ item, className }) => {
 	const navigate = useNavigate();
 
-	console.log("[EpisodeCard] Item to show:", item);
-
 	const title = item.episodeName;
-	const description = item.episodeSummary;
+	const description = item.episodeDescription;
 	const imageUrl = item.episodeImageUrl;
 	const episodeDuration = item.episodeDuration; // Format: HH:MM:SS
 	const formattedDuration = formatDuration(episodeDuration);
