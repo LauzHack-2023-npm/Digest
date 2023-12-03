@@ -75,18 +75,20 @@ def generate_digest_content():
         results = generate_digest_data(digestName, digestDescription)
         results = results.json
 
-        openai.api_key = os.environ.get("OPENAI_API_KEY")
-
-        prompt = f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself.\nAI:"
-
-        response = openai.Completion.create(
-            model="gpt-3.5-turbo-instruct",
-            prompt=prompt,
+        conversation_prompt = [
+            {"role": "system", "content": f"You: You are given some data: '{results}'. Take the 3 articles you find the most interesting and write a podcast script based on the knowledge I gave you. The style of your answer should be {narrationStyle}. Just print the text of the podcast itself."},
+        ]
+        client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo-instruct",#"gpt-3.5-turbo-16k",
             temperature=0.7,
-            max_tokens=2000
+            max_tokens=2000,
+            messages=conversation_prompt
         )
-
-        response_text = response['choices'][0]['text'].strip()
+        client.close()
+        
+        result_json = response.choices[0].message.content
+        result_dict = json.loads(result_json)
         
         episode_name = "TODO"
         episode_summary = "TODO"
