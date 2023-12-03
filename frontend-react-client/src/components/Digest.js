@@ -10,6 +10,7 @@ const Digest = () => {
     window.scrollTo(0, 0);
   }, []);
 
+
 	const digestData = {
 		digestName: state.digestName ?? "The Daily Digest",
 		digestDescription: state.digestDescription ?? "This podcast is about...",
@@ -38,6 +39,11 @@ const Digest = () => {
 		return Math.floor(differenceInTime / (1000 * 3600 * 24));
 	};
 
+	const pathParts = state.episodeMP3path.split("/");
+	const audioIndex = pathParts.indexOf("audio");
+	const extractedPart = process.env.PUBLIC_URL + "/" + pathParts.slice(audioIndex).join("/");
+	console.log(extractedPart)
+
 	return (
 		<>
 			<Card sx={{ width: "100%" }}>
@@ -53,7 +59,7 @@ const Digest = () => {
 							order="standart"
 							preload="auto"
 							loop={false}
-							src={item.episodeMP3path}
+							src={extractedPart}
 						/>
 
 						<Typography gutterBottom variant="h5" component="div">
